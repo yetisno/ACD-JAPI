@@ -12,4 +12,8 @@ public class BadContentException extends RuntimeException {
 	public BadContentException() {
 		super("Data can't convert to JSON type.");
 	}
+
+	public BadContentException(String message) {
+		super(message);
+	}
 }

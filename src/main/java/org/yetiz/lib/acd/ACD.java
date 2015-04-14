@@ -43,6 +43,9 @@ public class ACD {
         if (code == null) {
             throw new AuthorizationRequiredException(client_id, redirectUrl, writable);
         }
+        if (code == "") {
+            throw new AuthorizationRequiredException(client_id, redirectUrl, writable);
+        }
         return ACDSession.getACDSessionByCode(client_id, client_secret, code, redirectUrl);
     }
 
@@ -55,7 +58,13 @@ public class ACD {
 
     public static void main(String[] args) {
 		ACD acd = new ACD("", "");
-        ACDSession acdSession = acd.getACDSessionByCode("");
+        ACDSession acdSession = acd.getACDSessionByCode(null);
         acdSession.destroy();
+//        calendar.add(Calendar.SECOND, object.get("expires_in").getAsInt());
+//        acdSession.acdToken = new ACDToken(
+//            object.get("token_type").getAsString(),
+//            calendar.getTime(),
+//            object.get("refresh_token").getAsString(),
+//            object.get("access_token").getAsString());
     }
 }

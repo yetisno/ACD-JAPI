@@ -5,7 +5,6 @@ import com.ning.http.client.AsyncHttpClient;
 import com.ning.http.client.AsyncHttpClientConfig;
 import com.ning.http.client.Request;
 import com.ning.http.client.Response;
-import com.ning.http.client.multipart.StringPart;
 import org.yetiz.lib.acd.Entity.Endpoint;
 import org.yetiz.lib.acd.api.Account;
 import org.yetiz.lib.acd.exception.BadParameterException;
@@ -83,12 +82,13 @@ public class ACDSession {
 	private void refreshToken() {
 		Response response;
 		try {
+			String body = "grant_type=refresh_token" +
+				"&refresh_token=" + acdToken.getRefreshToken() +
+				"&client_id=" + Utils.urlEncode(client_id) +
+				"&client_secret=" + Utils.urlEncode(client_secret);
 			response = asyncHttpClient.preparePost("https://api.amazon.com/auth/o2/token")
 				.addHeader("Content-Type", "application/x-www-form-urlencoded")
-				.addBodyPart(new StringPart("grant_type", "refresh_token"))
-				.addBodyPart(new StringPart("refresh_token", acdToken.getRefreshToken()))
-				.addBodyPart(new StringPart("client_id", client_id))
-				.addBodyPart(new StringPart("client_secret", client_secret)).execute().get();
+				.setBody(body).execute().get();
 		} catch (Throwable t) {
 			throw new RuntimeException(t.getMessage());
 		}
