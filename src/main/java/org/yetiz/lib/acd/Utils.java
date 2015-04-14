@@ -31,7 +31,11 @@ public class Utils {
 		return rtn;
 	}
 
-	public static String getCharset(){
+	public static String getCharset() {
 		return "UTF-8";
+	}
+
+	public static String getContentType() {
+		return "application/x-www-form-urlencoded";
 	}
 }

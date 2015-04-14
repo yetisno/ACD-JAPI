@@ -7,7 +7,10 @@ import com.ning.http.client.Request;
 import com.ning.http.client.Response;
 import org.yetiz.lib.acd.Entity.Endpoint;
 import org.yetiz.lib.acd.api.Account;
+import org.yetiz.lib.acd.exception.ACDResponseException;
+import org.yetiz.lib.acd.exception.AuthorizationRequiredException;
 import org.yetiz.lib.acd.exception.BadParameterException;
+import org.yetiz.lib.acd.exception.InvalidAuthTokenException;
 
 import java.util.Calendar;
 
@@ -16,10 +19,8 @@ import java.util.Calendar;
  */
 public class ACDSession {
 	private AsyncHttpClient asyncHttpClient = null;
-	private boolean autoRefresh = true;
-	private String client_id = "";
-	private String client_secret = "";
 	private ACDToken acdToken = null;
+	private Configure configure = null;
 	private String contentUrl = "";
 	private String metadataUrl = "https://drive.amazonaws.com/drive/v1/";
 
@@ -31,20 +32,18 @@ public class ACDSession {
 	}
 
 
-	protected static ACDSession getACDSessionByCode(String client_id, String client_secret, String code, String
-		redirectUri) {
+	protected static ACDSession getACDSessionByCode(Configure configure, String code) {
 		ACDSession acdSession = new ACDSession();
-		acdSession.client_id = client_id;
-		acdSession.client_secret = client_secret;
+		acdSession.configure = configure;
 		Response response;
 		try {
 			String body = "grant_type=authorization_code" +
 				"&code=" + Utils.urlEncode(code) +
-				"&client_id=" + Utils.urlEncode(client_id) +
-				"&client_secret=" + Utils.urlEncode(client_secret) +
-				"&redirect_uri=" + redirectUri;
+				"&client_id=" + Utils.urlEncode(configure.getClientId()) +
+				"&client_secret=" + Utils.urlEncode(configure.getClientSecret()) +
+				"&redirect_uri=" + Utils.urlEncode(configure.getRedirectUri());
 			response = acdSession.asyncHttpClient.preparePost("https://api.amazon.com/auth/o2/token")
-				.addHeader("Content-Type", "application/x-www-form-urlencoded")
+				.addHeader("Content-Type", Utils.getContentType())
 				.setBody(body).execute().get();
 		} catch (Throwable t) {
 			throw new RuntimeException(t.getMessage());
@@ -54,22 +53,26 @@ public class ACDSession {
 			throw new BadParameterException(response);
 		} else if (statusCode == 200) {
 			JsonObject object = Utils.convertBodyToJson(response);
+			Integer expires_in = object.get("expires_in").getAsInt();
+			String token_type = object.get("token_type").getAsString();
+			String refresh_token = object.get("refresh_token").getAsString();
+			String access_token = object.get("access_token").getAsString();
 			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.SECOND, object.get("expires_in").getAsInt());
+			calendar.add(Calendar.SECOND, expires_in);
 			acdSession.acdToken = new ACDToken(
-				object.get("token_type").getAsString(),
+				token_type,
 				calendar.getTime(),
-				object.get("refresh_token").getAsString(),
-				object.get("access_token").getAsString());
+				refresh_token,
+				access_token);
 			acdSession.refreshEndpoint();
+			acdSession.updateTokenOfConfigureFile();
 		}
 		return acdSession;
 	}
 
-	protected static ACDSession getACDSessionByToken(String client_id, String client_secret, ACDToken acdToken) {
+	protected static ACDSession getACDSessionByToken(Configure configure, ACDToken acdToken) {
 		ACDSession acdSession = new ACDSession();
-		acdSession.client_id = client_id;
-		acdSession.client_secret = client_secret;
+		acdSession.configure = configure;
 		acdSession.acdToken = acdToken;
 		if (acdToken.isExpire()) {
 			acdSession.refreshToken();
@@ -83,55 +86,80 @@ public class ACDSession {
 		Response response;
 		try {
 			String body = "grant_type=refresh_token" +
-				"&refresh_token=" + acdToken.getRefreshToken() +
-				"&client_id=" + Utils.urlEncode(client_id) +
-				"&client_secret=" + Utils.urlEncode(client_secret);
+				"&refresh_token=" + Utils.urlEncode(acdToken.getRefreshToken()) +
+				"&client_id=" + Utils.urlEncode(configure.getClientId()) +
+				"&client_secret=" + Utils.urlEncode(configure.getClientSecret());
 			response = asyncHttpClient.preparePost("https://api.amazon.com/auth/o2/token")
-				.addHeader("Content-Type", "application/x-www-form-urlencoded")
+				.addHeader("Content-Type", Utils.getContentType())
 				.setBody(body).execute().get();
 		} catch (Throwable t) {
 			throw new RuntimeException(t.getMessage());
 		}
 		int statusCode = response.getStatusCode();
 		if (statusCode == 400) {
-			throw new BadParameterException(response);
+			throw new AuthorizationRequiredException(configure.getClientId(), configure.getRedirectUri(),
+				configure.isWritable());
 		} else if (statusCode == 200) {
 			JsonObject object = Utils.convertBodyToJson(response);
+			Integer expires_in = object.get("expires_in").getAsInt();
+			String token_type = object.get("token_type").getAsString();
+			String refresh_token = object.get("refresh_token").getAsString();
+			String access_token = object.get("access_token").getAsString();
 			Calendar calendar = Calendar.getInstance();
-			calendar.add(Calendar.SECOND, object.get("expires_in").getAsInt());
+			calendar.add(Calendar.SECOND, expires_in);
 			acdToken = new ACDToken(
-				object.get("token_type").getAsString(),
+				token_type,
 				calendar.getTime(),
-				object.get("refresh_token").getAsString(),
-				object.get("access_token").getAsString());
+				refresh_token,
+				access_token);
 			refreshEndpoint();
-		}
+			updateTokenOfConfigureFile();
+		} else
+			throw new ACDResponseException(response);
 	}
 
 	public ACDToken getToken() {
 		return acdToken;
 	}
 
+	/**
+	 * Fire by request and return checked response, if the token is expired, it'll renew token and re-fire request.
+	 *
+	 * @param request
+	 * @return the response of request
+	 */
 	public Response execute(Request request) {
 		if (acdToken.isExpire())
 			refreshToken();
 		try {
-			return asyncHttpClient.executeRequest(request).get();
+			Response response = asyncHttpClient.executeRequest(request).get();
+			ACDResponseChecker.check(response);
+			return response;
+		} catch (InvalidAuthTokenException e) {
+			if (configure.isAutoRefresh()) {
+				refreshToken();
+				return execute(request);
+			}
+			throw e;
+		} catch (ACDResponseException e) {
+			throw e;
 		} catch (Throwable t) {
 			throw new RuntimeException(t.getMessage());
 		}
+	}
+
+	private void updateTokenOfConfigureFile() {
+		if (!configure.isAutoConfigureUpdate())
+			return;
+		configure.setAccessToken(acdToken.getAccessToken());
+		configure.setRefreshToken(acdToken.getRefreshToken());
+		configure.update();
 	}
 
 	private void refreshEndpoint() {
 		Endpoint endpoint = Account.getEndpoint(this);
 		contentUrl = endpoint.getContentUrl();
 		metadataUrl = endpoint.getMetadataUrl();
-//		200 : OK.
-//		400 : Bad input parameter. Error message should indicate which one and why.
-//		401 : The client passed in the invalid Auth token, Client should refresh the token and then try again.
-//		403 : Forbidden
-//		500 : Servers are not working as expected. The request is probably valid but needs to be requested again later.
-//		503 : Service Unavailable.
 	}
 
 	public String getContentUrl() {
@@ -149,4 +177,13 @@ public class ACDSession {
 	public void destroy() {
 		asyncHttpClient.close();
 	}
+
+	public Configure getConfigure() {
+		return configure;
+	}
+
+	public void setConfigure(Configure configure) {
+		this.configure = configure;
+	}
+
 }

@@ -2,69 +2,69 @@ package org.yetiz.lib.acd;
 
 import org.yetiz.lib.acd.exception.AuthorizationRequiredException;
 
+import java.io.File;
+import java.util.Calendar;
+
 /**
  * Created by yeti on 2015/4/13.
  */
 public class ACD {
 
-    private String client_id = "";
-    private String client_secret = "";
-    private String redirectUrl = "http://localhost";
-    private boolean writable = true;
-    private ACDSession currentSession = null;
+	private ACDSession currentSession = null;
 
-    public ACD(String client_id, String client_secret) {
-        this.client_id = client_id;
-        this.client_secret = client_secret;
-    }
+	public ACD() {
+	}
 
-    /**
-     * Default: http://localhost
-     *
-     * @param redirectUrl
-     */
-    public ACD setRedirectUrl(String redirectUrl) {
-        this.redirectUrl = redirectUrl;
-        return this;
-    }
+	public ACDSession getACDSessionByCode(Configure configure, String code) throws AuthorizationRequiredException {
+		if (code == null) {
+			throw new AuthorizationRequiredException(configure.getClientId(), configure.getRedirectUri(),
+				configure.isWritable());
+		}
+		if (code.equals("")) {
+			throw new AuthorizationRequiredException(configure.getClientId(), configure.getRedirectUri(),
+				configure.isWritable());
+		}
+		return ACDSession.getACDSessionByCode(configure, code);
+	}
 
-    /**
-     * Default: true
-     *
-     * @param writable
-     */
-    public ACD setWritable(boolean writable) {
-        this.writable = writable;
-        return this;
-    }
+	public ACDSession getACDSessionByToken(Configure configure, ACDToken acdToken) {
+		if (acdToken == null) {
+			throw new NullPointerException("acdToken is not nullable.");
+		}
+		return ACDSession.getACDSessionByToken(configure, acdToken);
+	}
 
+	public static void main(String[] args) {
+		Configure configure = null;
+		if (args.length >= 1) {
+			File file = new File(System.getProperty("user.dir") + File.separator + args[0]);
+			if (file.exists()) {
+				configure = Configure.load(file);
+			}
+			file = new File(args[0]);
+			if (file.exists()) {
+				configure = Configure.load(file);
+			}
+		}
+		if (configure == null) {
+			configure = new Configure();
+		}
 
-    public ACDSession getACDSessionByCode(String code) throws AuthorizationRequiredException {
-        if (code == null) {
-            throw new AuthorizationRequiredException(client_id, redirectUrl, writable);
-        }
-        if (code == "") {
-            throw new AuthorizationRequiredException(client_id, redirectUrl, writable);
-        }
-        return ACDSession.getACDSessionByCode(client_id, client_secret, code, redirectUrl);
-    }
-
-    public ACDSession getACDSessionByToken(ACDToken acdToken) {
-        if (acdToken == null) {
-            throw new NullPointerException("acdToken is not nullable.");
-        }
-        return ACDSession.getACDSessionByToken(client_id, client_secret, acdToken);
-    }
-
-    public static void main(String[] args) {
-		ACD acd = new ACD("", "");
-        ACDSession acdSession = acd.getACDSessionByCode(null);
-        acdSession.destroy();
-//        calendar.add(Calendar.SECOND, object.get("expires_in").getAsInt());
-//        acdSession.acdToken = new ACDToken(
-//            object.get("token_type").getAsString(),
-//            calendar.getTime(),
-//            object.get("refresh_token").getAsString(),
-//            object.get("access_token").getAsString());
-    }
+		ACD acd = new ACD();
+		ACDSession acdSession = null;
+		if (configure.getAccessToken().equals("")) {
+			if (args.length == 2)
+				acdSession = acd.getACDSessionByCode(configure, args[1]);
+			else {
+				acd.getACDSessionByCode(configure, null);
+			}
+		} else {
+			Calendar calendar = Calendar.getInstance();
+			calendar.add(Calendar.SECOND, 3600);
+			ACDToken acdToken = new ACDToken(configure.getTokenType(), calendar.getTime(),
+				configure.getRefreshToken(), configure.getAccessToken());
+			acdSession = acd.getACDSessionByToken(configure, acdToken);
+		}
+		acdSession.destroy();
+	}
 }

@@ -5,6 +5,7 @@ import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 import org.yetiz.lib.acd.ACDSession;
 import org.yetiz.lib.acd.Entity.Endpoint;
+import org.yetiz.lib.acd.ACDResponseChecker;
 import org.yetiz.lib.acd.Utils;
 
 import java.io.IOException;
@@ -14,12 +15,14 @@ import java.io.IOException;
  */
 public class Account {
 	public static Endpoint getEndpoint(ACDSession acdSession) {
+		String resourceEndpoint = "account/endpoint";
 		Response response = acdSession.execute(new RequestBuilder()
-			.setUrl(acdSession.getMetadataUrl() + "account/endpoint")
+			.setUrl(acdSession.getMetadataUrl() + resourceEndpoint)
 			.setMethod("GET")
 			.addHeader("Authorization", acdSession.getToken().getAuthorizationString())
 			.build());
 		Endpoint endpoint = null;
+		ACDResponseChecker.check(response);
 		if (response.getStatusCode() == 200) {
 			try {
 				endpoint = new Gson().fromJson(response.getResponseBody(Utils.getCharset()), Endpoint.class);
