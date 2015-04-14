@@ -11,7 +11,7 @@ import java.util.Properties;
  */
 public class Configure {
 	private String name = "ACD-JAPI";
-	private String path = System.getProperty("user.dir") + File.separator + "ACD-JAPI.conf";
+	private String path = System.getProperty("user.dir") + File.separator + name + ".conf";
 	private Boolean writable = true;
 	private Boolean autoRefresh = true;
 	private Boolean autoConfigureUpdate = true;
