@@ -1,5 +1,7 @@
 package org.yetiz.lib.acd.exception;
 
+import org.yetiz.lib.utils.Log;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -20,6 +22,7 @@ public class AuthorizationRequiredException extends RuntimeException {
 		this.client_id = client_id;
 		this.redirectUrl = redirectUrl;
 		this.writable = writable;
+		Log.e(getMessage());
 	}
 
 	/**

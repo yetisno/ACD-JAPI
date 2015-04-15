@@ -11,6 +11,7 @@ import org.yetiz.lib.acd.exception.ACDResponseException;
 import org.yetiz.lib.acd.exception.AuthorizationRequiredException;
 import org.yetiz.lib.acd.exception.BadParameterException;
 import org.yetiz.lib.acd.exception.InvalidAuthTokenException;
+import org.yetiz.lib.utils.Log;
 
 import java.util.Calendar;
 
@@ -33,6 +34,7 @@ public class ACDSession {
 
 
 	protected static ACDSession getACDSessionByCode(Configure configure, String code) {
+		Log.v("getACDSession");
 		ACDSession acdSession = new ACDSession();
 		acdSession.configure = configure;
 		Response response;
@@ -71,6 +73,7 @@ public class ACDSession {
 	}
 
 	protected static ACDSession getACDSessionByToken(Configure configure, ACDToken acdToken) {
+		Log.v("getACDSession");
 		ACDSession acdSession = new ACDSession();
 		acdSession.configure = configure;
 		acdSession.acdToken = acdToken;
@@ -84,6 +87,7 @@ public class ACDSession {
 
 	private void refreshToken() {
 		Response response;
+		Log.v("Refresh Token.");
 		try {
 			String body = "grant_type=refresh_token" +
 				"&refresh_token=" + Utils.urlEncode(acdToken.getRefreshToken()) +
@@ -129,11 +133,14 @@ public class ACDSession {
 	 * @return the response of request
 	 */
 	public Response execute(Request request) {
+		Log.v("Execute Request");
 		if (acdToken.isExpire())
 			refreshToken();
 		try {
+			long time = System.currentTimeMillis();
 			Response response = asyncHttpClient.executeRequest(request).get();
 			ACDResponseChecker.check(response);
+			Log.d("Execute Time", new Long(System.currentTimeMillis() - time).toString() + "ms");
 			return response;
 		} catch (InvalidAuthTokenException e) {
 			if (configure.isAutoRefresh()) {
@@ -151,6 +158,7 @@ public class ACDSession {
 	private void updateTokenOfConfigureFile() {
 		if (!configure.isAutoConfigureUpdate())
 			return;
+		configure.setTokenType(acdToken.getTokenType());
 		configure.setAccessToken(acdToken.getAccessToken());
 		configure.setRefreshToken(acdToken.getRefreshToken());
 		configure.update();
@@ -166,8 +174,26 @@ public class ACDSession {
 		return contentUrl;
 	}
 
+	/**
+	 * combine contentUrl, resourceUrl and return
+	 * @param resourceUrl
+	 * @return
+	 */
+	public String getContentUrl(String resourceUrl){
+		return getContentUrl() + resourceUrl;
+	}
+
 	public String getMetadataUrl() {
 		return metadataUrl;
+	}
+
+	/**
+	 * combine metadataUrl, resourceUrl and return
+	 * @param resourceUrl
+	 * @return
+	 */
+	public String getMetadataUrl(String resourceUrl){
+		return getMetadataUrl() + resourceUrl;
 	}
 
 	public void close() {

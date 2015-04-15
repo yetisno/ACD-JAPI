@@ -77,6 +77,10 @@ public class Configure {
 		return name;
 	}
 
+	public String getPath() {
+		return path;
+	}
+
 	public String getClientId() {
 		return client_id;
 	}

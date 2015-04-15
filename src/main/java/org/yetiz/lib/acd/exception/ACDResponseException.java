@@ -1,6 +1,7 @@
 package org.yetiz.lib.acd.exception;
 
 import com.ning.http.client.Response;
+import org.yetiz.lib.utils.Log;
 
 import java.io.IOException;
 
@@ -18,6 +19,7 @@ public class ACDResponseException extends RuntimeException {
 		} catch (IOException e) {
 			throw new BadContentException(e.getMessage());
 		}
+		Log.e(getMessage());
 	}
 
 	@Override

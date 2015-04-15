@@ -1,5 +1,7 @@
 package org.yetiz.lib.acd;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ning.http.client.Response;
@@ -8,6 +10,7 @@ import org.yetiz.lib.acd.exception.BadContentException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.Date;
 
 /**
  * Created by yeti on 2015/4/13.
@@ -31,11 +34,25 @@ public class Utils {
 		return rtn;
 	}
 
+	public static String getResponseBody(Response response){
+		try {
+			return response.getResponseBody(Utils.getCharset());
+		} catch (IOException e) {
+			throw new BadContentException();
+		}
+	}
+
 	public static String getCharset() {
 		return "UTF-8";
 	}
 
 	public static String getContentType() {
 		return "application/x-www-form-urlencoded";
+	}
+
+	public static Gson getGson(){
+		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(Date.class, new DateAdapter());
+		return builder.create();
 	}
 }

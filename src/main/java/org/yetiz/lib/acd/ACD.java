@@ -1,5 +1,9 @@
 package org.yetiz.lib.acd;
 
+import org.yetiz.lib.acd.Entity.AccountInfo;
+import org.yetiz.lib.acd.Entity.AccountQuota;
+import org.yetiz.lib.acd.Entity.AccountUsage;
+import org.yetiz.lib.acd.api.Account;
 import org.yetiz.lib.acd.exception.AuthorizationRequiredException;
 
 import java.io.File;
@@ -48,6 +52,11 @@ public class ACD {
 		}
 		if (configure == null) {
 			configure = new Configure();
+			if (new File(configure.getPath()).exists()) {
+				configure = Configure.load(new File(configure.getPath()));
+			} else {
+				configure.update();
+			}
 		}
 
 		ACD acd = new ACD();
@@ -65,6 +74,11 @@ public class ACD {
 				configure.getRefreshToken(), configure.getAccessToken());
 			acdSession = acd.getACDSessionByToken(configure, acdToken);
 		}
+
+		AccountInfo accountInfo = Account.getAccountInfo(acdSession);
+		AccountQuota accountQuota = Account.getAccountQuota(acdSession);
+		AccountUsage accountUsage = Account.getAccountUsage(acdSession);
+
 		acdSession.destroy();
 	}
 }

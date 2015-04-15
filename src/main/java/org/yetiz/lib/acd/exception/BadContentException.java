@@ -1,5 +1,7 @@
 package org.yetiz.lib.acd.exception;
 
+import org.yetiz.lib.utils.Log;
+
 /**
  * Created by yeti on 2015/4/13.
  */
@@ -11,9 +13,11 @@ public class BadContentException extends RuntimeException {
 	 */
 	public BadContentException() {
 		super("Data can't convert to JSON type.");
+		Log.e(getMessage());
 	}
 
 	public BadContentException(String message) {
 		super(message);
+		Log.e(getMessage());
 	}
 }
