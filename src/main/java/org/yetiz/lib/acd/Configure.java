@@ -55,7 +55,7 @@ public class Configure {
 		return configure;
 	}
 
-	public void update() {
+	public void save() {
 		Properties properties = new Properties();
 		properties.setProperty("name", name);
 		properties.setProperty("writable", writable ? "TRUE" : "FALSE");

@@ -164,7 +164,7 @@ public class ACDSession {
 		configure.setTokenType(acdToken.getTokenType());
 		configure.setAccessToken(acdToken.getAccessToken());
 		configure.setRefreshToken(acdToken.getRefreshToken());
-		configure.update();
+		configure.save();
 	}
 
 	private void refreshEndpoint() {

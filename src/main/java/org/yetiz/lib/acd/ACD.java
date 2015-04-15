@@ -55,7 +55,7 @@ public class ACD {
 			if (new File(configure.getPath()).exists()) {
 				configure = Configure.load(new File(configure.getPath()));
 			} else {
-				configure.update();
+				configure.save();
 			}
 		}
 
