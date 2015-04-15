@@ -16,48 +16,44 @@ import org.yetiz.lib.utils.Log;
 public class Account {
 
 	public static Endpoint getEndpoint(ACDSession acdSession) {
-		Log.v("GetEndpoint");
+		Log.d("GetEndpoint");
 		String resourceEndpoint = "account/endpoint";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
-			.addHeader("Authorization", acdSession.getToken().getAuthorizationString())
 			.build());
 		Endpoint endpoint = Utils.getGson().fromJson(Utils.getResponseBody(response), Endpoint.class);
 		return endpoint;
 	}
 
 	public static AccountInfo getAccountInfo(ACDSession acdSession) {
-		Log.v("getAccountInfo");
+		Log.d("getAccountInfo");
 		String resourceEndpoint = "account/info";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
-			.addHeader("Authorization", acdSession.getToken().getAuthorizationString())
 			.build());
 		AccountInfo accountInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), AccountInfo.class);
 		return accountInfo;
 	}
 
 	public static AccountQuota getAccountQuota(ACDSession acdSession){
-		Log.v("getAccountQuota");
+		Log.d("getAccountQuota");
 		String resourceEndpoint = "account/quota";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
-			.addHeader("Authorization", acdSession.getToken().getAuthorizationString())
 			.build());
 		AccountQuota accountQuota = Utils.getGson().fromJson(Utils.getResponseBody(response), AccountQuota.class);
 		return accountQuota;
 	}
 
 	public static AccountUsage getAccountUsage(ACDSession acdSession){
-		Log.v("getAccountUsage");
+		Log.d("getAccountUsage");
 		String resourceEndpoint = "account/usage";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
-			.addHeader("Authorization", acdSession.getToken().getAuthorizationString())
 			.build());
 		AccountUsage accountUsage = Utils.getGson().fromJson(Utils.getResponseBody(response), AccountUsage.class);
 		return accountUsage;

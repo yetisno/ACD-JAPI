@@ -1,10 +1,7 @@
 package org.yetiz.lib.acd;
 
 import com.google.gson.JsonObject;
-import com.ning.http.client.AsyncHttpClient;
-import com.ning.http.client.AsyncHttpClientConfig;
-import com.ning.http.client.Request;
-import com.ning.http.client.Response;
+import com.ning.http.client.*;
 import org.yetiz.lib.acd.Entity.Endpoint;
 import org.yetiz.lib.acd.api.Account;
 import org.yetiz.lib.acd.exception.ACDResponseException;
@@ -87,7 +84,7 @@ public class ACDSession {
 
 	private void refreshToken() {
 		Response response;
-		Log.v("Refresh Token.");
+		Log.d("Refresh Token.");
 		try {
 			String body = "grant_type=refresh_token" +
 				"&refresh_token=" + Utils.urlEncode(acdToken.getRefreshToken()) +
@@ -116,8 +113,8 @@ public class ACDSession {
 				calendar.getTime(),
 				refresh_token,
 				access_token);
-			refreshEndpoint();
 			updateTokenOfConfigureFile();
+			refreshEndpoint();
 		} else
 			throw new ACDResponseException(response);
 	}
@@ -137,6 +134,7 @@ public class ACDSession {
 		if (acdToken.isExpire())
 			refreshToken();
 		try {
+			request = setAuthHeader(request);
 			long time = System.currentTimeMillis();
 			Response response = asyncHttpClient.executeRequest(request).get();
 			ACDResponseChecker.check(response);
@@ -144,6 +142,7 @@ public class ACDSession {
 			return response;
 		} catch (InvalidAuthTokenException e) {
 			if (configure.isAutoRefresh()) {
+				Log.d("Auto Refresh Token");
 				refreshToken();
 				return execute(request);
 			}
@@ -153,6 +152,10 @@ public class ACDSession {
 		} catch (Throwable t) {
 			throw new RuntimeException(t.getMessage());
 		}
+	}
+
+	private Request setAuthHeader(Request request) {
+		return new RequestBuilder(request).setHeader("Authorization", acdToken.getAuthorizationString()).build();
 	}
 
 	private void updateTokenOfConfigureFile() {
@@ -176,10 +179,11 @@ public class ACDSession {
 
 	/**
 	 * combine contentUrl, resourceUrl and return
+	 *
 	 * @param resourceUrl
 	 * @return
 	 */
-	public String getContentUrl(String resourceUrl){
+	public String getContentUrl(String resourceUrl) {
 		return getContentUrl() + resourceUrl;
 	}
 
@@ -189,10 +193,11 @@ public class ACDSession {
 
 	/**
 	 * combine metadataUrl, resourceUrl and return
+	 *
 	 * @param resourceUrl
 	 * @return
 	 */
-	public String getMetadataUrl(String resourceUrl){
+	public String getMetadataUrl(String resourceUrl) {
 		return getMetadataUrl() + resourceUrl;
 	}
 
