@@ -1,9 +1,8 @@
 package org.yetiz.lib.acd;
 
-import org.yetiz.lib.acd.Entity.AccountInfo;
-import org.yetiz.lib.acd.Entity.AccountQuota;
-import org.yetiz.lib.acd.Entity.AccountUsage;
+import org.yetiz.lib.acd.Entity.*;
 import org.yetiz.lib.acd.api.Account;
+import org.yetiz.lib.acd.api.Nodes;
 import org.yetiz.lib.acd.exception.AuthorizationRequiredException;
 
 import java.io.File;
@@ -78,7 +77,13 @@ public class ACD {
 		AccountInfo accountInfo = Account.getAccountInfo(acdSession);
 		AccountQuota accountQuota = Account.getAccountQuota(acdSession);
 		AccountUsage accountUsage = Account.getAccountUsage(acdSession);
-
+		FileInfo fileInfo = Nodes.getFileMetadata(acdSession, "wflhKX14RYGJu-K21JLrNA");
+		fileInfo.setName("IMG_0770.m4v");
+		fileInfo = Nodes.updateFileMetadata(acdSession, fileInfo);
+		FolderInfo folderInfo = Nodes.getFolderMetadata(acdSession, "1nqEb8n4RuCHu8hr2M1GQA");
+		folderInfo.setName("Documents");
+		folderInfo = Nodes.updateFolderMetadata(acdSession, folderInfo);
+		System.out.println("File counts: " + Nodes.getFileInfoLists(acdSession, null).getCount());
 		acdSession.destroy();
 	}
 }

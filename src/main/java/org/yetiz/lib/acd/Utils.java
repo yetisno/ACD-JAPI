@@ -34,7 +34,7 @@ public class Utils {
 		return rtn;
 	}
 
-	public static String getResponseBody(Response response){
+	public static String getResponseBody(Response response) {
 		try {
 			return response.getResponseBody(Utils.getCharset());
 		} catch (IOException e) {
@@ -50,9 +50,28 @@ public class Utils {
 		return "application/x-www-form-urlencoded";
 	}
 
-	public static Gson getGson(){
+	public static Gson getGson() {
 		GsonBuilder builder = new GsonBuilder();
 		builder.registerTypeAdapter(Date.class, new DateAdapter());
 		return builder.create();
+	}
+
+	public static String stringAppender(String... strings) {
+		StringBuilder stringBuilder = new StringBuilder();
+		for (String string : strings){
+			stringBuilder.append(string);
+		}
+		return stringBuilder.toString();
+	}
+
+	public static String stringFormatter(String format, Object... arguments) {
+		String[] formatSegments = format.split("\\{\\}");
+		StringBuilder stringBuilder = new StringBuilder();
+		for (int i = 0; i < formatSegments.length; i++) {
+			stringBuilder.append(formatSegments[i]);
+			if (i < arguments.length)
+				stringBuilder.append(arguments[i]);
+		}
+		return stringBuilder.toString();
 	}
 }
