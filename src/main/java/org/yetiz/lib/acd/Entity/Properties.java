@@ -12,7 +12,7 @@ public class Properties {
 	protected Integer statusCode = Integer.MIN_VALUE;
 	protected String owner = "CloudDrive";
 	protected Map<String, String> data = new HashMap<String, String>();
-	protected Property[] properties = new Property[]{};
+	protected List<Property> properties;
 
 	public Integer getStatusCode() {
 		return statusCode;
@@ -26,19 +26,14 @@ public class Properties {
 		this.owner = owner;
 	}
 
-	public Property[] get() {
+	public List<Property> get() {
+		properties = new ArrayList<Property>();
 		if (data.size() > 0) {
-			List<Property> properties = new ArrayList<Property>();
 			for (Map.Entry<String, String> entry : data.entrySet()) {
-				Property property = new Property();
-				property.setOwner(owner);
-				property.setKey(entry.getKey());
-				property.setValue(entry.getValue());
-				properties.add(property);
+				properties.add(new Property(owner, entry.getKey(), entry.getValue()));
 			}
-			this.properties = properties.toArray(new Property[]{});
 			data.clear();
 		}
-		return this.properties;
+		return properties;
 	}
 }

@@ -5,7 +5,7 @@ import org.yetiz.lib.acd.api.Account;
 import org.yetiz.lib.acd.api.Nodes;
 import org.yetiz.lib.acd.exception.AuthorizationRequiredException;
 
-import java.io.File;
+import java.io.*;
 import java.util.Calendar;
 
 /**
@@ -84,6 +84,30 @@ public class ACD {
 		folderInfo.setName("Documents");
 		folderInfo = Nodes.updateFolderMetadata(acdSession, folderInfo);
 		System.out.println("File counts: " + Nodes.getFileInfoLists(acdSession, null).getCount());
+		FileInfo upload = new FileInfo();
+		upload.setName("Test.txt");
+		upload.setParents(null);
+		upload.setLabels(null);
+		upload = Nodes.uploadFile(acdSession, upload, new File("/Users/yeti/Documents/[LINE]EWC改革解放軍.txt"));
+		upload = Nodes.overwriteFile(acdSession, upload, new File("/Users/yeti/Desktop/i5e62nT.jpg"));
+//		InputStream inputStream = Nodes.downloadFile(acdSession, upload);
+//		try {
+//			FileOutputStream fileOutputStream = new FileOutputStream(new File("/Users/yeti/Desktop/i5e62nT2.jpg"));
+//			int read = 0;
+//			byte[] buffer = new byte[256];
+//			while (true) {
+//				read = inputStream.read(buffer);
+//				if (read == -1) {
+//					break;
+//				}
+//				fileOutputStream.write(buffer);
+//			}
+//			inputStream.close();
+//			fileOutputStream.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+
 		acdSession.destroy();
 	}
 }

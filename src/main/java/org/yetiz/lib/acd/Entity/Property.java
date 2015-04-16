@@ -10,6 +10,15 @@ public class Property {
 	protected String key = "";
 	protected String value = "";
 
+	public Property() {
+	}
+
+	public Property(String owner, String key, String value) {
+		this.owner = owner;
+		this.key = key;
+		this.value = value;
+	}
+
 	public Integer getStatusCode() {
 		return statusCode;
 	}

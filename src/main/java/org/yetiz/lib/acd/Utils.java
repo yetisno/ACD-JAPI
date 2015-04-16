@@ -58,7 +58,7 @@ public class Utils {
 
 	public static String stringAppender(String... strings) {
 		StringBuilder stringBuilder = new StringBuilder();
-		for (String string : strings){
+		for (String string : strings) {
 			stringBuilder.append(string);
 		}
 		return stringBuilder.toString();
@@ -73,5 +73,13 @@ public class Utils {
 				stringBuilder.append(arguments[i]);
 		}
 		return stringBuilder.toString();
+	}
+
+	public static String getCurrentMethodName() {
+		return Thread.currentThread().getStackTrace()[2].getMethodName();
+	}
+
+	public static String getCurrentClassName(){
+		return Thread.currentThread().getStackTrace()[2].getClassName();
 	}
 }

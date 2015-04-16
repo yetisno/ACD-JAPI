@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  */
 public class Log {
 	private static Logger getLogger() {
-		return LoggerFactory.getLogger(new RuntimeException().getStackTrace()[3].getClassName());
+		return LoggerFactory.getLogger(Thread.currentThread().getStackTrace()[3].getClassName());
 	}
 
 	/**

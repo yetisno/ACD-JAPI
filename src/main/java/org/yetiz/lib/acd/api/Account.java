@@ -16,7 +16,7 @@ import org.yetiz.lib.utils.Log;
 public class Account {
 
 	public static Endpoint getEndpoint(ACDSession acdSession) {
-		Log.d("GetEndpoint");
+		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = "account/endpoint";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
@@ -27,7 +27,7 @@ public class Account {
 	}
 
 	public static AccountInfo getAccountInfo(ACDSession acdSession) {
-		Log.d("getAccountInfo");
+		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = "account/info";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
@@ -38,7 +38,7 @@ public class Account {
 	}
 
 	public static AccountQuota getAccountQuota(ACDSession acdSession){
-		Log.d("getAccountQuota");
+		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = "account/quota";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
@@ -49,7 +49,7 @@ public class Account {
 	}
 
 	public static AccountUsage getAccountUsage(ACDSession acdSession){
-		Log.d("getAccountUsage");
+		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = "account/usage";
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
