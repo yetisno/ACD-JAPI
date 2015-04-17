@@ -24,6 +24,8 @@ public abstract class NodeInfo {
 	protected Boolean isShared = false;
 	protected Map<String, Map<String, String>> properties = new HashMap<String, Map<String, String>>();
 
+	public NodeInfo() {
+	}
 
 	public String getId() {
 		return id;
@@ -31,6 +33,10 @@ public abstract class NodeInfo {
 
 	public String getName() {
 		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getKind() {
@@ -57,8 +63,16 @@ public abstract class NodeInfo {
 		return labels;
 	}
 
+	public void setLabels(String[] labels) {
+		this.labels = labels;
+	}
+
 	public String getDescription() {
 		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	public String getCreatedBy() {
@@ -67,6 +81,10 @@ public abstract class NodeInfo {
 
 	public String[] getParents() {
 		return parents;
+	}
+
+	public void setParents(String[] parents) {
+		this.parents = parents;
 	}
 
 	public String getStatus() {
@@ -79,22 +97,6 @@ public abstract class NodeInfo {
 
 	public Boolean isShared() {
 		return isShared;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setParents(String[] parents) {
-		this.parents = parents;
-	}
-
-	public void setLabels(String[] labels) {
-		this.labels = labels;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public Boolean isFile() {

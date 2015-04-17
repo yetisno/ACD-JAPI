@@ -11,16 +11,22 @@ public class Log {
 		return LoggerFactory.getLogger(Thread.currentThread().getStackTrace()[3].getClassName());
 	}
 
+	private static Logger getLogger(String className) {
+		return LoggerFactory.getLogger(className);
+	}
+
 	/**
 	 * verbose
+	 *
 	 * @param description
 	 */
-	public static void v(String description) {
+	public static void t(String description) {
 		getLogger().trace(" {}", description);
 	}
 
 	/**
 	 * debug
+	 *
 	 * @param description
 	 */
 	public static void d(String description) {
@@ -29,6 +35,7 @@ public class Log {
 
 	/**
 	 * info
+	 *
 	 * @param description
 	 */
 	public static void i(String description) {
@@ -37,6 +44,7 @@ public class Log {
 
 	/**
 	 * warning
+	 *
 	 * @param description
 	 */
 	public static void w(String description) {
@@ -45,6 +53,7 @@ public class Log {
 
 	/**
 	 * error
+	 *
 	 * @param description
 	 */
 	public static void e(String description) {
@@ -53,15 +62,17 @@ public class Log {
 
 	/**
 	 * verbose
+	 *
 	 * @param name
 	 * @param description
 	 */
-	public static void v(String name, String description) {
+	public static void t(String name, String description) {
 		getLogger().trace("{}: {}", name, description);
 	}
 
 	/**
 	 * debug
+	 *
 	 * @param name
 	 * @param description
 	 */
@@ -71,6 +82,7 @@ public class Log {
 
 	/**
 	 * info
+	 *
 	 * @param name
 	 * @param description
 	 */
@@ -80,6 +92,7 @@ public class Log {
 
 	/**
 	 * warning
+	 *
 	 * @param name
 	 * @param description
 	 */
@@ -89,10 +102,56 @@ public class Log {
 
 	/**
 	 * error
+	 *
 	 * @param name
 	 * @param description
 	 */
 	public static void e(String name, String description) {
 		getLogger().error("{}: {}", name, description);
+	}
+
+	/**
+	 * verbose
+	 *
+	 * @param description
+	 */
+	public static void t(Class clazz, String description) {
+		getLogger(clazz.getName()).trace(" {}", description);
+	}
+
+	/**
+	 * debug
+	 *
+	 * @param description
+	 */
+	public static void d(Class clazz, String description) {
+		getLogger(clazz.getName()).debug(" {}", description);
+	}
+
+	/**
+	 * info
+	 *
+	 * @param description
+	 */
+	public static void i(Class clazz, String description) {
+		getLogger(clazz.getName()).info(" {}", description);
+	}
+
+	/**
+	 * warning
+	 *
+	 * @param description
+	 */
+	public static void w(Class clazz, String description) {
+		getLogger(clazz.getName()).warn(" {}", description);
+	}
+
+	/**
+	 * error
+	 *
+	 * @param description
+	 */
+	public static void e(Class clazz, String description) {
+		getLogger(clazz.getName()).error(" {}", description);
 	}
 }

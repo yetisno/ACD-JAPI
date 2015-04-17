@@ -21,7 +21,7 @@ import java.util.TimeZone;
 /**
  * Created by yeti on 4/15/15.
  */
-public final class DateAdapter extends TypeAdapter<Date>  {
+public final class DateAdapter extends TypeAdapter<Date> {
 	public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
 		@SuppressWarnings("unchecked") // we use a runtime check to make sure the 'T's equal
 		public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {

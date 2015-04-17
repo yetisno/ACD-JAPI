@@ -1,4 +1,4 @@
-package org.yetiz.lib.acd.api;
+package org.yetiz.lib.acd.api.v1;
 
 import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
@@ -14,10 +14,11 @@ import org.yetiz.lib.utils.Log;
  * Created by yeti on 2015/4/13.
  */
 public class Account {
+	private static String root = "account";
 
 	public static Endpoint getEndpoint(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = "account/endpoint";
+		String resourceEndpoint = Utils.stringFormatter("{}/endpoint", root);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
@@ -28,7 +29,7 @@ public class Account {
 
 	public static AccountInfo getAccountInfo(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = "account/info";
+		String resourceEndpoint = Utils.stringFormatter("{}/info", root);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
@@ -37,9 +38,9 @@ public class Account {
 		return accountInfo;
 	}
 
-	public static AccountQuota getAccountQuota(ACDSession acdSession){
+	public static AccountQuota getAccountQuota(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = "account/quota";
+		String resourceEndpoint = Utils.stringFormatter("{}/quota", root);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
@@ -48,9 +49,9 @@ public class Account {
 		return accountQuota;
 	}
 
-	public static AccountUsage getAccountUsage(ACDSession acdSession){
+	public static AccountUsage getAccountUsage(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = "account/usage";
+		String resourceEndpoint = Utils.stringFormatter("{}/usage", root);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")

@@ -3,7 +3,7 @@ package org.yetiz.lib.acd;
 import com.google.gson.JsonObject;
 import com.ning.http.client.*;
 import org.yetiz.lib.acd.Entity.Endpoint;
-import org.yetiz.lib.acd.api.Account;
+import org.yetiz.lib.acd.api.v1.Account;
 import org.yetiz.lib.acd.exception.ACDResponseException;
 import org.yetiz.lib.acd.exception.AuthorizationRequiredException;
 import org.yetiz.lib.acd.exception.BadParameterException;
@@ -29,9 +29,12 @@ public class ACDSession {
 		this.asyncHttpClient = new AsyncHttpClient(asyncHttpClientConfig);
 	}
 
-
-	protected static ACDSession getACDSessionByCode(Configure configure, String code) {
-		Log.v("getACDSession");
+	public static ACDSession getACDSessionByCode(Configure configure, String code) {
+		Log.d(Utils.getCurrentMethodName());
+		if (code == null || code == "") {
+			throw new AuthorizationRequiredException(configure.getClientId(), configure.getRedirectUri(), configure
+				.isWritable());
+		}
 		ACDSession acdSession = new ACDSession();
 		acdSession.configure = configure;
 		Response response;
@@ -42,7 +45,7 @@ public class ACDSession {
 				"&client_secret=" + Utils.urlEncode(configure.getClientSecret()) +
 				"&redirect_uri=" + Utils.urlEncode(configure.getRedirectUri());
 			response = acdSession.asyncHttpClient.preparePost("https://api.amazon.com/auth/o2/token")
-				.addHeader("Content-Type", Utils.getContentType())
+				.addHeader("Content-Type", "application/x-www-form-urlencoded")
 				.setBody(body).execute().get();
 		} catch (Throwable t) {
 			throw new RuntimeException(t.getMessage());
@@ -69,8 +72,11 @@ public class ACDSession {
 		return acdSession;
 	}
 
-	protected static ACDSession getACDSessionByToken(Configure configure, ACDToken acdToken) {
-		Log.v("getACDSession");
+	public static ACDSession getACDSessionByToken(Configure configure, ACDToken acdToken) {
+		Log.d(Utils.getCurrentMethodName());
+		if (acdToken == null) {
+			throw new NullPointerException("acdToken is not nullable.");
+		}
 		ACDSession acdSession = new ACDSession();
 		acdSession.configure = configure;
 		acdSession.acdToken = acdToken;
@@ -82,16 +88,16 @@ public class ACDSession {
 		return acdSession;
 	}
 
-	private void refreshToken() {
+	public void refreshToken() {
 		Response response;
-		Log.d("Refresh Token.");
+		Log.d(Utils.getCurrentMethodName());
 		try {
 			String body = "grant_type=refresh_token" +
 				"&refresh_token=" + Utils.urlEncode(acdToken.getRefreshToken()) +
 				"&client_id=" + Utils.urlEncode(configure.getClientId()) +
 				"&client_secret=" + Utils.urlEncode(configure.getClientSecret());
 			response = asyncHttpClient.preparePost("https://api.amazon.com/auth/o2/token")
-				.addHeader("Content-Type", Utils.getContentType())
+				.addHeader("Content-Type", "application/x-www-form-urlencoded")
 				.setBody(body).execute().get();
 		} catch (Throwable t) {
 			throw new RuntimeException(t.getMessage());
@@ -130,14 +136,14 @@ public class ACDSession {
 	 * @return the response of request
 	 */
 	public Response execute(Request request) {
-		Log.v("Execute Request");
+		Log.d(Utils.getCurrentMethodName());
 		if (acdToken.isExpire())
 			refreshToken();
 		try {
 			request = setAuthHeader(request);
 			long time = System.currentTimeMillis();
 			Response response = asyncHttpClient.executeRequest(request).get();
-			ACDResponseChecker.check(response);
+			ResponseCode.check(response);
 			Log.d("Execute Time", new Long(System.currentTimeMillis() - time).toString() + "ms");
 			return response;
 		} catch (InvalidAuthTokenException e) {

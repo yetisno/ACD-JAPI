@@ -35,11 +35,11 @@ public class ACDToken {
 		return expireTime;
 	}
 
-	public boolean isExpire(){
+	public boolean isExpire() {
 		return expireTime.before(Calendar.getInstance().getTime());
 	}
 
-	public String getAuthorizationString(){
+	public String getAuthorizationString() {
 		return Character.toUpperCase(token_type.charAt(0)) + token_type.substring(1) + " " + access_token;
 	}
 }

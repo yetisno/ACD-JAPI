@@ -11,9 +11,11 @@ import java.util.Calendar;
 /**
  * Created by yeti on 2015/4/13.
  */
-public class ACD {
+public class MainClass {
 
-	public ACD() {
+	private ACDSession currentSession = null;
+
+	public MainClass() {
 	}
 
 	public static void main(String[] args) {
@@ -37,7 +39,7 @@ public class ACD {
 			}
 		}
 
-		ACD acd = new ACD();
+		MainClass acd = new MainClass();
 		ACDSession acdSession = null;
 		if (configure.getAccessToken().equals("")) {
 			if (args.length == 2)

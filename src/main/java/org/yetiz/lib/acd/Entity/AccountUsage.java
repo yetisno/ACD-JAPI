@@ -13,12 +13,12 @@ public class AccountUsage {
 	private ResourceType video;
 
 
-	public class ResourceType{
+	public class ResourceType {
 		private Meta total;
 		private Meta billable;
 	}
 
-	public class Meta{
+	public class Meta {
 		private Long bytes;
 		private Long count;
 	}

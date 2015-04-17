@@ -14,6 +14,11 @@ public class FileInfo extends NodeInfo {
 		kind = "FILE";
 	}
 
+	public FileInfo(String id) {
+		super();
+		this.id = id;
+	}
+
 	public String getTempLink() {
 		return tempLink;
 	}
@@ -131,7 +136,7 @@ public class FileInfo extends NodeInfo {
 			public String getFocalLength() {
 				return focalLength;
 			}
-
+			
 			public String getDateTime() {
 				return dateTime;
 			}

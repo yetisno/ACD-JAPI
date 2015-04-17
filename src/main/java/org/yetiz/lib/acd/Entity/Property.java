@@ -5,7 +5,7 @@ package org.yetiz.lib.acd.Entity;
  */
 public class Property {
 	protected Integer statusCode = Integer.MIN_VALUE;
-	protected String owner = "CloudDrive";
+	protected String owner = null;
 	protected String location = "";
 	protected String key = "";
 	protected String value = "";
@@ -13,8 +13,7 @@ public class Property {
 	public Property() {
 	}
 
-	public Property(String owner, String key, String value) {
-		this.owner = owner;
+	public Property(String key, String value) {
 		this.key = key;
 		this.value = value;
 	}

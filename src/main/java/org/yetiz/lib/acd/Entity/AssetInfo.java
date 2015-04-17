@@ -7,4 +7,9 @@ public class AssetInfo extends FileInfo {
 	public AssetInfo() {
 		kind = "ASSET";
 	}
+
+	public AssetInfo(String id) {
+		super();
+		this.id = id;
+	}
 }

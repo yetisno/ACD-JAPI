@@ -1,4 +1,4 @@
-package org.yetiz.lib.acd.api;
+package org.yetiz.lib.acd.api.v1;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,7 +37,7 @@ public class Nodes {
 	 */
 	public static FileInfo uploadFile(ACDSession acdSession, FileInfo uploadedFileInfo, File uploadFile) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = "nodes";
+		String resourceEndpoint = "nodes?suppress=deduplication";
 		CreateStructure createStructure = new CreateStructure();
 		createStructure.name = uploadedFileInfo.getName();
 		createStructure.kind = uploadedFileInfo.getKind();
@@ -79,6 +79,7 @@ public class Nodes {
 
 	/**
 	 * Download file as <code>InputStream</code>
+	 *
 	 * @param acdSession
 	 * @param downloadedFileInfo
 	 * @return
@@ -136,7 +137,6 @@ public class Nodes {
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
-
 		FileInfoList fileInfoList = Utils.getGson().fromJson(Utils.getResponseBody(response), FileInfoList.class);
 		return fileInfoList;
 	}
@@ -373,16 +373,20 @@ public class Nodes {
 	}
 
 	/**
-	 * Get List of target <code>parent</code> Node, only show FOLDER or FILE. Each query return max to 200 Node.
+	 * Get List of target <code>parent</code> Node, each query return max to 200 Node.
 	 *
 	 * @param acdSession
 	 * @param parent     target Node
+	 * @param filters    filter return result, Example: kind:(FOLDER* OR FILE*)
 	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
 	 */
-	public static NodeInfoList getChildsListOfNode(ACDSession acdSession, NodeInfo parent, String startToken) {
+	public static NodeInfoList getChildList(ACDSession acdSession, NodeInfo parent, String filters, String
+		startToken) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, parent.getId(), "/children?filters=kind:(FOLDER OR "
-			+ "FILE)");
+		String resourceEndpoint = Utils.stringAppender(root, parent.getId(), "/children?");
+		if (filters != null && !filters.equals("")) {
+			resourceEndpoint = Utils.stringFormatter("{}&filters={}", resourceEndpoint, filters);
+		}
 		if (startToken != null) {
 			resourceEndpoint = Utils.stringFormatter("{}&startToken={}", resourceEndpoint, startToken);
 		}
@@ -402,6 +406,9 @@ public class Nodes {
 			if (object.get("kind").getAsString().equals("FOLDER")) {
 				data.add(Utils.getGson().fromJson(object, FolderInfo.class));
 			}
+			if (object.get("kind").getAsString().equals("ASSET")) {
+				data.add(Utils.getGson().fromJson(object, AssetInfo.class));
+			}
 		}
 		NodeInfoList nodeInfoList = new NodeInfoList(responseObject.get("count").getAsLong(),
 			(responseObject.has("nextToken") ? responseObject.get("nextToken").getAsString() : ""), data);
@@ -409,19 +416,34 @@ public class Nodes {
 	}
 
 	/**
+	 * Get child list of target <code>parent</code>, with filters=kind:(FOLDER* OR FILE*)
+	 *
+	 * @param acdSession
+	 * @param parent     target node
+	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
+	 * @return
+	 */
+	public static NodeInfoList getChildList(ACDSession acdSession, NodeInfo parent, String
+		startToken) {
+		return getChildList(acdSession, parent, "kind:(FOLDER* OR FILE*)", startToken);
+	}
+
+	/**
 	 * add property to <code>node</code> in <code>owner</code> group.
 	 *
 	 * @param acdSession
 	 * @param node
-	 * @param property   require owner, key and value.
+	 * @param property   require key and value.
 	 * @return
 	 */
 	public static Property addProperty(ACDSession acdSession, NodeInfo node, Property property) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/", property.getOwner(), "/",
+		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/",
+			acdSession.getConfigure().getOwner(), "/",
 			property.getKey());
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
+			.setBody(Utils.stringFormatter("{\"value\":\"{}\"}", property.getValue()))
 			.setMethod("PUT")
 			.build());
 		Property rtnProperty = Utils.getGson().fromJson(Utils.getResponseBody(response), Property.class);
@@ -444,6 +466,7 @@ public class Nodes {
 			.setMethod("GET")
 			.build());
 		Properties rtnProperties = Utils.getGson().fromJson(Utils.getResponseBody(response), Properties.class);
+		rtnProperties.setOwner(owner);
 		return rtnProperties;
 	}
 
@@ -452,19 +475,20 @@ public class Nodes {
 	 *
 	 * @param acdSession
 	 * @param node
-	 * @param property   require owner and key.
+	 * @param owner
+	 * @param key
 	 * @return
 	 */
-	public static Property getProperty(ACDSession acdSession, NodeInfo node, Property property) {
+	public static Property getProperty(ACDSession acdSession, NodeInfo node, String owner, String key) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/", property.getOwner(), "/",
-			property.getKey());
+		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/", owner, "/",
+			key);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
 		Property rtnProperty = Utils.getGson().fromJson(Utils.getResponseBody(response), Property.class);
-		rtnProperty.setOwner(property.getOwner());
+		rtnProperty.setOwner(owner);
 		return rtnProperty;
 	}
 
@@ -473,12 +497,12 @@ public class Nodes {
 	 *
 	 * @param acdSession
 	 * @param node
-	 * @param property   require owner, key
+	 * @param key
 	 */
-	public static void deleteProperty(ACDSession acdSession, NodeInfo node, Property property) {
+	public static void deleteProperty(ACDSession acdSession, NodeInfo node, String key) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/", property.getOwner(), "/",
-			property.getKey());
+		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/",
+			acdSession.getConfigure().getOwner(), "/", key);
 		acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("DELETE")

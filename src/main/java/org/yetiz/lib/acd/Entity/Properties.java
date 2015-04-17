@@ -29,8 +29,11 @@ public class Properties {
 	public List<Property> get() {
 		properties = new ArrayList<Property>();
 		if (data.size() > 0) {
+			Property property;
 			for (Map.Entry<String, String> entry : data.entrySet()) {
-				properties.add(new Property(owner, entry.getKey(), entry.getValue()));
+				property = new Property(entry.getKey(), entry.getValue());
+				property.setOwner(owner);
+				properties.add(property);
 			}
 			data.clear();
 		}

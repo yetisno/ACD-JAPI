@@ -10,6 +10,11 @@ public class FolderInfo extends NodeInfo {
 		kind = "FOLDER";
 	}
 
+	public FolderInfo(String id) {
+		super();
+		this.id = id;
+	}
+
 	public Boolean isRoot() {
 		return isRoot;
 	}

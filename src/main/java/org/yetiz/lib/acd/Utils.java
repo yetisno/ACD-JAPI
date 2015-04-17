@@ -46,9 +46,6 @@ public class Utils {
 		return "UTF-8";
 	}
 
-	public static String getContentType() {
-		return "application/x-www-form-urlencoded";
-	}
 
 	public static Gson getGson() {
 		GsonBuilder builder = new GsonBuilder();
@@ -79,7 +76,7 @@ public class Utils {
 		return Thread.currentThread().getStackTrace()[2].getMethodName();
 	}
 
-	public static String getCurrentClassName(){
+	public static String getCurrentClassName() {
 		return Thread.currentThread().getStackTrace()[2].getClassName();
 	}
 }
