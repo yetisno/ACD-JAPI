@@ -40,7 +40,7 @@ Please visit [Getting Started](https://developer.amazon.com/public/apis/experien
 
 1. Add [Security Profile](https://developer.amazon.com/lwa/sp/overview.html)
 2. Add your security profile to [Whitelist](https://developer.amazon.com/cd/sp/overview.html)
-3. Login to **https://www.amazon.com/ap/oa?client_id=&lt;your_client_id&gt;&scope=clouddrive%3Aread%20clouddrive%3Awrite&response_type=code&redirect_uri=http://localhost** 
+3. Login to **https://www.amazon.com/ap/oa?client_id=<your_client_id>&scope=clouddrive%3Aread%20clouddrive%3Awrite&response_type=code&redirect_uri=http://localhost** 
 and get return param **code** from return url. Example: if the return url is 
 **http://localhost/?code=ANdNAVhyhqirUelHGEHA&scope=clouddrive%3Aread+clouddrive%3Awrite** , then the **code** is **ANdNAVhyhqirUelHGEHA**.
 4. Setting `Configure` by load from file (`Configure.load(File configureFile)`), or create a `Configure` instance and update it.
