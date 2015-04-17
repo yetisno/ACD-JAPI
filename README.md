@@ -27,6 +27,15 @@ Sample run Class is `org.yetiz.lib.acd.sample.MainSampleClass`
 To start using it, you should have amazon account and request a secret profile then add to CloudDrive whitelist.
 Please visit [Getting Started](https://developer.amazon.com/public/apis/experience/cloud-drive/content/getting-started#register) for more detail.
 
+1. Add [Security Profile](https://developer.amazon.com/lwa/sp/overview.html)
+2. Add your security profile to [Whitelist](https://developer.amazon.com/cd/sp/overview.html)
+3. [Login](https://www.amazon.com/ap/oa?client_id=Client_id&scope=clouddrive%3Aread%20clouddrive%3Awrite&response_type=code&redirect_uri=http://localhost) and get return code on url. Example: the return url is 
+**http://localhost/?code=ANdNAVhyhqirUelHGEHA&scope=clouddrive%3Aread+clouddrive%3Awrite** , then the code is **ANdNAVhyhqirUelHGEHA**.
+4. Use `ACDSession.getACDSessionByCode(Configure configure, String code)` to get first `ACDSession`
+5. Once you have `access_token` and `refresh_token`, save it at configure file, it can be loaded by `Configure.load(File configureFile)`,
+ and update the configure to file by `Configure.save()`. If the `autoConfigureUpdate` and `autoRefresh` field in configure file is set 
+ as true, it'll auto refresh token when expired and auto write config to file.
+
 `ACD` provide friendly method to operate those API.
 
 You should create a `ACDSession` instance for all operation.
