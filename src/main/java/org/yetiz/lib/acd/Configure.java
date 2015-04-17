@@ -83,6 +83,10 @@ public class Configure {
 		return name;
 	}
 
+	/**
+	 * required field.
+	 * @param name
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -95,6 +99,10 @@ public class Configure {
 		return client_id;
 	}
 
+	/**
+	 * required field.
+	 * @param client_id
+	 */
 	public void setClientId(String client_id) {
 		this.client_id = client_id;
 	}
@@ -103,6 +111,10 @@ public class Configure {
 		return client_secret;
 	}
 
+	/**
+	 * required field.
+	 * @param client_secret
+	 */
 	public void setClientSecret(String client_secret) {
 		this.client_secret = client_secret;
 	}
@@ -127,6 +139,10 @@ public class Configure {
 		return token_type;
 	}
 
+	/**
+	 * required field.
+	 * @param token_type
+	 */
 	public void setTokenType(String token_type) {
 		this.token_type = token_type;
 	}
@@ -135,6 +151,10 @@ public class Configure {
 		return access_token;
 	}
 
+	/**
+	 * required field.
+	 * @param access_token
+	 */
 	public void setAccessToken(String access_token) {
 		this.access_token = access_token;
 	}
@@ -143,6 +163,10 @@ public class Configure {
 		return refresh_token;
 	}
 
+	/**
+	 * required field.
+	 * @param refresh_token
+	 */
 	public void setRefreshToken(String refresh_token) {
 		this.refresh_token = refresh_token;
 	}
