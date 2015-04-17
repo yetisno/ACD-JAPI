@@ -22,7 +22,7 @@ public class Trash {
 	private static String root = "trash";
 
 	/**
-	 * Move node to Trash
+	 * Move node to Trash, if the kind is not FILE, FOLDER, ASSET, it return null.
 	 *
 	 * @param acdSession
 	 * @param node
@@ -30,14 +30,24 @@ public class Trash {
 	 */
 	public static NodeInfo moveNodeToTrash(ACDSession acdSession, NodeInfo node) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = acdSession.getMetadataUrl(Utils.stringFormatter(
-			"{}/{}", root, node.getId()));
+		String resourceEndpoint = Utils.stringFormatter("{}/{}", root, node.getId());
 		Request request = new RequestBuilder()
-			.setUrl(acdSession.getContentUrl(resourceEndpoint))
+			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
+			.setBody("{}")
 			.setMethod("PUT")
 			.build();
 		Response response = acdSession.execute(request);
-		NodeInfo rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), NodeInfo.class);
+		String kind = ((JsonObject) new JsonParser().parse(Utils.getResponseBody(response))).get("kind").getAsString();
+		NodeInfo rtnNodeInfo = null;
+		if (kind.equals("FILE")) {
+			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), FileInfo.class);
+		}
+		if (kind.equals("FOLDER")) {
+			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), FolderInfo.class);
+		}
+		if (kind.equals("ASSET")) {
+			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), AssetInfo.class);
+		}
 		return rtnNodeInfo;
 	}
 
@@ -64,13 +74,14 @@ public class Trash {
 		for (Iterator<JsonElement> iterator = responseObject.get("data").getAsJsonArray().iterator();
 		     iterator.hasNext(); ) {
 			JsonObject object = ((JsonObject) iterator.next());
-			if (object.get("kind").getAsString().equals("FILE")) {
+			String kind = object.get("kind").getAsString();
+			if (kind.equals("FILE")) {
 				data.add(Utils.getGson().fromJson(object, FileInfo.class));
 			}
-			if (object.get("kind").getAsString().equals("FOLDER")) {
+			if (kind.equals("FOLDER")) {
 				data.add(Utils.getGson().fromJson(object, FolderInfo.class));
 			}
-			if (object.get("kind").getAsString().equals("ASSET")) {
+			if (kind.equals("ASSET")) {
 				data.add(Utils.getGson().fromJson(object, AssetInfo.class));
 			}
 		}
@@ -88,14 +99,23 @@ public class Trash {
 	 */
 	public static NodeInfo restore(ACDSession acdSession, NodeInfo node) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = acdSession.getMetadataUrl(Utils.stringFormatter(
-			"{}/{}/restore", root, node.getId()));
+		String resourceEndpoint = Utils.stringFormatter("{}/{}/restore", root, node.getId());
 		Request request = new RequestBuilder()
-			.setUrl(acdSession.getContentUrl(resourceEndpoint))
+			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("POST")
 			.build();
 		Response response = acdSession.execute(request);
-		NodeInfo rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), NodeInfo.class);
+		String kind = ((JsonObject) new JsonParser().parse(Utils.getResponseBody(response))).get("kind").getAsString();
+		NodeInfo rtnNodeInfo = null;
+		if (kind.equals("FILE")) {
+			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), FileInfo.class);
+		}
+		if (kind.equals("FOLDER")) {
+			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), FolderInfo.class);
+		}
+		if (kind.equals("ASSET")) {
+			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), AssetInfo.class);
+		}
 		return rtnNodeInfo;
 	}
 }

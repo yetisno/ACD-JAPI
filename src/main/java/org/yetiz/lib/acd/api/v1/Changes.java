@@ -18,7 +18,7 @@ public class Changes {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = root;
 		Request request = new RequestBuilder()
-			.setUrl(acdSession.getContentUrl(resourceEndpoint))
+			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("POST")
 			.setBody(checkpoint != null ? Utils.stringFormatter("checkpoint={}", checkpoint) : "")
 			.build();

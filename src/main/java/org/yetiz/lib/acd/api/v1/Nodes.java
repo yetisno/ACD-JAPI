@@ -28,10 +28,10 @@ public class Nodes {
 	public static String root = "nodes";
 
 	/**
-	 * POST : {{contentUrl}}/nodes?suppress={suppress}
+	 * Upload file
 	 *
 	 * @param acdSession
-	 * @param uploadedFileInfo name and kind required. labels, properties and parents are optional.
+	 * @param uploadedFileInfo name and kind are required. labels, properties and parents are optional.
 	 * @param uploadFile
 	 * @return
 	 */
