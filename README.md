@@ -4,23 +4,34 @@ This project provide a Java version of Amazon Cloud Drive API from REST version.
 
 ## Usage
 ### Configure file
-1. You can copy ACD-JAPI.conf.sample, name it as ACD-JAPI.conf and setting it.(name, client_id, client_secret is 
-required at least!)
-2. You can just create `Configure` instance and setting it.
+
+There are two ways to create `Configure` instance.
+
+1. Copy `ACD-JAPI.conf.sample` to `ACD-JAPI.conf` and load by `Configure.load(File configureFile)`.
+2. Create a `Configure` instance and update it.
+
+#### Important
+name, client_id, client_secret is necessary!
+
+owner is required when use `Property` operation.
+
+Follow HowTo section to get `access_token` and `refresh_token`
 
 #### Field Description
-    redirect_uri #string - after authenticated, redirect the result to this url.
-    name #string - configure file name
-    client_secret #string - secret profile password
-    autoRefresh #boolean - auto refresh token when expired.(token lifetime is 3600)
-    owner #string - this field is required only on `Property` operation.
-    client_id #string - secret profile id
-    token_type #string - API token type (it should be `bearer`, it'll auto refresh when refresh token)
-    access_token #string - API access token.
-    writable #boolean - is Amazon Cloud Drive writable.
-    refresh_token #string - API refresh token.
-    autoConfigureUpdate #boolean - auto refresh configure file.
+    redirect_uri        #string     after authenticated, redirect the result to this url.
+    name (*)            #string     configure file name
+    client_secret (*)   #string     secret profile password
+    autoRefresh         #boolean    auto refresh token when expired.(token lifetime is 3600)
+    owner               #string     this field is required only on `Property` operation.
+    client_id (*)       #string     secret profile id
+    token_type (*)      #string     API token type (it should be `bearer`, it'll auto refresh when refresh token)
+    access_token (**)   #string     API access token.
+    writable            #boolean    is Amazon Cloud Drive writable.
+    refresh_token (**)  #string     API refresh token.
+    autoConfigureUpdate #boolean    auto refresh configure file.
+(*) is necessary.
 
+(**) for all API operation. 
 ### HowTo
 Sample run Class is `org.yetiz.lib.acd.sample.MainSampleClass`
 
@@ -29,12 +40,22 @@ Please visit [Getting Started](https://developer.amazon.com/public/apis/experien
 
 1. Add [Security Profile](https://developer.amazon.com/lwa/sp/overview.html)
 2. Add your security profile to [Whitelist](https://developer.amazon.com/cd/sp/overview.html)
-3. [Login](https://www.amazon.com/ap/oa?client_id=Client_id&scope=clouddrive%3Aread%20clouddrive%3Awrite&response_type=code&redirect_uri=http://localhost) and get return code on url. Example: the return url is 
-**http://localhost/?code=ANdNAVhyhqirUelHGEHA&scope=clouddrive%3Aread+clouddrive%3Awrite** , then the code is **ANdNAVhyhqirUelHGEHA**.
-4. Use `ACDSession.getACDSessionByCode(Configure configure, String code)` to get first `ACDSession`
-5. Once you have `access_token` and `refresh_token`, save it at configure file, it can be loaded by `Configure.load(File configureFile)`,
+3. [Login](https://www.amazon.com/ap/oa?client_id=Client_id&scope=clouddrive%3Aread%20clouddrive%3Awrite&response_type=code&redirect_uri=http://localhost) and get return param **code** on url. Example: the return url is 
+**http://localhost/?code=ANdNAVhyhqirUelHGEHA&scope=clouddrive%3Aread+clouddrive%3Awrite** , then the **code** is **ANdNAVhyhqirUelHGEHA**.
+4. Setting `Configure` by load from file (`Configure.load(File configureFile)`), or create a `Configure` instance and update it.
+5. Use `ACDSession.getACDSessionByCode(Configure configure, String code)` to get first `ACDSession`, use `getToken()` to get token or 
+it'll save to file if `autoConfigureUpdate` is `true`.
+6. Use `ACDSession.getACDSessionByToken(Configure configure, ACDToken acdToken)` to get `ACDSession` when you have previous token.
+7. Once you have `access_token` and `refresh_token`, save it at configure file, it can be loaded by `Configure.load(File configureFile)`,
  and update the configure to file by `Configure.save()`. If the `autoConfigureUpdate` and `autoRefresh` field in configure file is set 
  as true, it'll auto refresh token when expired and auto write config to file.
+
+#### The Flow:
+                Yes
+    Have token--------> Follow 4. and 6. to get ACDSession
+        |       
+     No |--> Follow 1. ~ 5. to get ACDSession and token
+    
 
 `ACD` provide friendly method to operate those API.
 
