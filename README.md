@@ -33,4 +33,13 @@ You should create a `ACDSession` instance for all operation.
 
 The raw APIs are at `org.yetiz.lib.acd.api` package.
 
+### Contributing
+
+Please fork and send Pull Request
+
+Respect the formatting rules:
+Ident with 1 tab
+Use a 140 chars line max length
+Don't use * imports
+
 **Support** log4j (using slf4j)
