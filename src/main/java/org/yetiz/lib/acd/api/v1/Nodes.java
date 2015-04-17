@@ -25,7 +25,7 @@ import java.util.List;
  * Created by yeti on 2015/4/13.
  */
 public class Nodes {
-	public static String root = "nodes/";
+	public static String root = "nodes";
 
 	/**
 	 * POST : {{contentUrl}}/nodes?suppress={suppress}
@@ -37,7 +37,7 @@ public class Nodes {
 	 */
 	public static FileInfo uploadFile(ACDSession acdSession, FileInfo uploadedFileInfo, File uploadFile) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = "nodes?suppress=deduplication";
+		String resourceEndpoint = root + "?suppress=deduplication";
 		CreateStructure createStructure = new CreateStructure();
 		createStructure.name = uploadedFileInfo.getName();
 		createStructure.kind = uploadedFileInfo.getKind();
@@ -65,7 +65,7 @@ public class Nodes {
 	 */
 	public static FileInfo overwriteFile(ACDSession acdSession, FileInfo overwritedFileInfo, File uploadFile) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, overwritedFileInfo.getId(), "/content");
+		String resourceEndpoint = Utils.stringAppender(root, "/", overwritedFileInfo.getId(), "/content");
 		CreateStructure createStructure = new CreateStructure();
 		Request request = new RequestBuilder()
 			.setUrl(acdSession.getContentUrl(resourceEndpoint))
@@ -86,7 +86,7 @@ public class Nodes {
 	 */
 	public static InputStream downloadFile(ACDSession acdSession, FileInfo downloadedFileInfo) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, downloadedFileInfo.getId(), "/content");
+		String resourceEndpoint = Utils.stringAppender(root, "/", downloadedFileInfo.getId(), "/content");
 		CreateStructure createStructure = new CreateStructure();
 		Request request = new RequestBuilder()
 			.setUrl(acdSession.getContentUrl(resourceEndpoint))
@@ -164,7 +164,7 @@ public class Nodes {
 	public static FileInfo getFileMetadata(ACDSession acdSession, String id, Boolean withTempLink, String withAsset) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint;
-		resourceEndpoint = Utils.stringAppender(root, id, "?");
+		resourceEndpoint = Utils.stringAppender(root, "/", id, "?");
 		if (withTempLink) {
 			resourceEndpoint = Utils.stringAppender(resourceEndpoint, "tempLink=true");
 		}
@@ -200,7 +200,7 @@ public class Nodes {
 	 */
 	public static FileInfo updateFileMetadata(ACDSession acdSession, FileInfo fileInfo) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, fileInfo.getId());
+		String resourceEndpoint = Utils.stringAppender(root, "/", fileInfo.getId());
 		PatchStructure patchStructure = new PatchStructure();
 		patchStructure.name = fileInfo.getName();
 		patchStructure.description = fileInfo.getDescription();
@@ -277,7 +277,7 @@ public class Nodes {
 	 */
 	public static FolderInfo getFolderMetadata(ACDSession acdSession, String id) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, id);
+		String resourceEndpoint = Utils.stringAppender(root, "/", id);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
@@ -296,7 +296,7 @@ public class Nodes {
 	 */
 	public static FolderInfo updateFolderMetadata(ACDSession acdSession, FolderInfo folderInfo) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, folderInfo.getId());
+		String resourceEndpoint = Utils.stringAppender(root, "/", folderInfo.getId());
 		PatchStructure patchStructure = new PatchStructure();
 		patchStructure.name = folderInfo.getName();
 		patchStructure.description = folderInfo.getDescription();
@@ -345,7 +345,7 @@ public class Nodes {
 	 */
 	public static void addChildToNode(ACDSession acdSession, NodeInfo parent, NodeInfo child) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, parent.getId(), "/children/", child.getId());
+		String resourceEndpoint = Utils.stringAppender(root, "/", parent.getId(), "/children/", child.getId());
 		Request request = new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("PUT")
@@ -362,7 +362,7 @@ public class Nodes {
 	 */
 	public static void removeChildFromNode(ACDSession acdSession, NodeInfo parent, NodeInfo child) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, parent.getId(), "/children/", child.getId());
+		String resourceEndpoint = Utils.stringAppender(root, "/", parent.getId(), "/children/", child.getId());
 		Request request = new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("DELETE")
@@ -383,7 +383,7 @@ public class Nodes {
 	public static NodeInfoList getChildList(ACDSession acdSession, NodeInfo parent, String filters, String
 		startToken) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, parent.getId(), "/children?");
+		String resourceEndpoint = Utils.stringAppender(root, "/", parent.getId(), "/children?");
 		if (filters != null && !filters.equals("")) {
 			resourceEndpoint = Utils.stringFormatter("{}&filters={}", resourceEndpoint, filters);
 		}
@@ -438,7 +438,7 @@ public class Nodes {
 	 */
 	public static Property addProperty(ACDSession acdSession, NodeInfo node, Property property) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/",
+		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/",
 			acdSession.getConfigure().getOwner(), "/",
 			property.getKey());
 		Response response = acdSession.execute(new RequestBuilder()
@@ -460,7 +460,7 @@ public class Nodes {
 	 */
 	public static Properties getProperties(ACDSession acdSession, NodeInfo node, String owner) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/", owner);
+		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/", owner);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
@@ -481,7 +481,7 @@ public class Nodes {
 	 */
 	public static Property getProperty(ACDSession acdSession, NodeInfo node, String owner, String key) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/", owner, "/",
+		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/", owner, "/",
 			key);
 		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
@@ -501,7 +501,7 @@ public class Nodes {
 	 */
 	public static void deleteProperty(ACDSession acdSession, NodeInfo node, String key) {
 		Log.d(Utils.getCurrentMethodName());
-		String resourceEndpoint = Utils.stringAppender(root, node.getId(), "/properties/",
+		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/",
 			acdSession.getConfigure().getOwner(), "/", key);
 		acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
