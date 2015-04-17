@@ -1,0 +1,13 @@
+#Amazon Cloud Drive Java API Configure File.
+#Fri Apr 17 17:22:27 CST 2015
+redirect_uri=http\://localhost
+name=MYFirstAppForSpecialSession
+client_secret=asdafqweqwgtwetrqerqadfasgfaf34754rf12df123
+autoRefresh=TRUE
+owner=MYFirstApp
+client_id=amzn1.application-oa2-client.asdafqweqwgtwetrqerqadfasgfafad
+token_type=bearer
+access_token=Atza|dj23oi4um238p4q2pt3yctpmoyremawln7yl8muqE4MC8OAWRYWRMAWLYHR
+writable=TRUE
+refresh_token=Atzr|aslfjkhwlp34yioawhfalw84hya3r5wlirhwbl2
+autoConfigureUpdate=TRUE
