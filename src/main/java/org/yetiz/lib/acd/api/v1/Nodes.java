@@ -230,8 +230,8 @@ public class Nodes {
 			.setMethod("GET")
 			.build());
 
-		FolderInfo folderInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), FolderInfo.class);
-		return folderInfo;
+		FolderInfoList folderInfoList = Utils.getGson().fromJson(Utils.getResponseBody(response), FolderInfoList.class);
+		return folderInfoList.getCount() == 1 ? folderInfoList.getList().get(0) : null;
 
 	}
 

@@ -11,5 +11,10 @@ public class AccountQuota {
 	private Long available;
 	private String[] plans;
 	private String[] grants;
-	private String[] benefits;
+	private Benefit[] benefits;
+
+	public class Benefit {
+		private Date expiration;
+		private String benefit;
+	}
 }
