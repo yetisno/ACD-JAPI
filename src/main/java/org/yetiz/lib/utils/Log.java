@@ -18,7 +18,6 @@ public class Log {
 	/**
 	 * verbose
 	 *
-	 * @param description
 	 */
 	public static void t(String description) {
 		getLogger().trace(" {}", description);
@@ -27,7 +26,6 @@ public class Log {
 	/**
 	 * debug
 	 *
-	 * @param description
 	 */
 	public static void d(String description) {
 		getLogger().debug(" {}", description);
@@ -36,7 +34,6 @@ public class Log {
 	/**
 	 * info
 	 *
-	 * @param description
 	 */
 	public static void i(String description) {
 		getLogger().info(" {}", description);
@@ -45,7 +42,6 @@ public class Log {
 	/**
 	 * warning
 	 *
-	 * @param description
 	 */
 	public static void w(String description) {
 		getLogger().warn(" {}", description);
@@ -54,7 +50,6 @@ public class Log {
 	/**
 	 * error
 	 *
-	 * @param description
 	 */
 	public static void e(String description) {
 		getLogger().error(" {}", description);
@@ -63,8 +58,6 @@ public class Log {
 	/**
 	 * verbose
 	 *
-	 * @param name
-	 * @param description
 	 */
 	public static void t(String name, String description) {
 		getLogger().trace("{}: {}", name, description);
@@ -73,8 +66,6 @@ public class Log {
 	/**
 	 * debug
 	 *
-	 * @param name
-	 * @param description
 	 */
 	public static void d(String name, String description) {
 		getLogger().debug("{}: {}", name, description);
@@ -83,8 +74,6 @@ public class Log {
 	/**
 	 * info
 	 *
-	 * @param name
-	 * @param description
 	 */
 	public static void i(String name, String description) {
 		getLogger().info("{}: {}", name, description);
@@ -93,8 +82,6 @@ public class Log {
 	/**
 	 * warning
 	 *
-	 * @param name
-	 * @param description
 	 */
 	public static void w(String name, String description) {
 		getLogger().warn("{}: {}", name, description);
@@ -103,8 +90,6 @@ public class Log {
 	/**
 	 * error
 	 *
-	 * @param name
-	 * @param description
 	 */
 	public static void e(String name, String description) {
 		getLogger().error("{}: {}", name, description);
@@ -113,7 +98,6 @@ public class Log {
 	/**
 	 * verbose
 	 *
-	 * @param description
 	 */
 	public static void t(Class clazz, String description) {
 		getLogger(clazz.getName()).trace(" {}", description);
@@ -122,7 +106,6 @@ public class Log {
 	/**
 	 * debug
 	 *
-	 * @param description
 	 */
 	public static void d(Class clazz, String description) {
 		getLogger(clazz.getName()).debug(" {}", description);
@@ -131,7 +114,6 @@ public class Log {
 	/**
 	 * info
 	 *
-	 * @param description
 	 */
 	public static void i(Class clazz, String description) {
 		getLogger(clazz.getName()).info(" {}", description);
@@ -140,7 +122,6 @@ public class Log {
 	/**
 	 * warning
 	 *
-	 * @param description
 	 */
 	public static void w(Class clazz, String description) {
 		getLogger(clazz.getName()).warn(" {}", description);
@@ -149,7 +130,6 @@ public class Log {
 	/**
 	 * error
 	 *
-	 * @param description
 	 */
 	public static void e(Class clazz, String description) {
 		getLogger(clazz.getName()).error(" {}", description);

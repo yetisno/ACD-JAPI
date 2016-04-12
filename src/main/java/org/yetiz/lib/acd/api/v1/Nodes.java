@@ -30,9 +30,9 @@ public class Nodes {
 	/**
 	 * Upload file
 	 *
-	 * @param acdSession
+	 * @param acdSession       ACDSession ACDSession
 	 * @param uploadedFileInfo name and kind are required. labels, properties and parents are optional.
-	 * @param uploadFile
+	 * @param uploadFile       Upload File Path
 	 * @return
 	 */
 	public static FileInfo uploadFile(ACDSession acdSession, FileInfo uploadedFileInfo, File uploadFile) {
@@ -58,9 +58,9 @@ public class Nodes {
 	/**
 	 * overwrite target file by <code>uploadFile</code>
 	 *
-	 * @param acdSession
+	 * @param acdSession         ACDSession
 	 * @param overwritedFileInfo
-	 * @param uploadFile
+	 * @param uploadFile         Upload File Path
 	 * @return
 	 */
 	public static FileInfo overwriteFile(ACDSession acdSession, FileInfo overwritedFileInfo, File uploadFile) {
@@ -80,8 +80,8 @@ public class Nodes {
 	/**
 	 * Download file as <code>InputStream</code>
 	 *
-	 * @param acdSession
-	 * @param downloadedFileInfo
+	 * @param acdSession         ACDSession
+	 * @param downloadedFileInfo target file info
 	 * @return
 	 */
 	public static InputStream downloadFile(ACDSession acdSession, FileInfo downloadedFileInfo) {
@@ -101,11 +101,22 @@ public class Nodes {
 	}
 
 	/**
+	 * Get List of all FileInfo with sort="" and limit=200 and tempLink=true and asset=NONE
+	 *
+	 * @param acdSession ACDSession
+	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
+	 * @return
+	 */
+	public static FileInfoList getFileInfoLists(ACDSession acdSession, String startToken) {
+		return getFileInfoLists(acdSession, startToken, null, null, true, null);
+	}
+
+	/**
 	 * Get List of all FileInfo.
 	 *
-	 * @param acdSession
+	 * @param acdSession   ACDSession
 	 * @param startToken   <code>nextToken</code> from previous request for access more content. Default: null
-	 * @param sort         Sortable fields - createdDate, modifiedDate, contentDate, name, size and contentType. <br />
+	 * @param sort         Sortable fields - createdDate, modifiedDate, contentDate, name, size and contentType. <br>
 	 *                     Example: sort:["name ASC","contentProperties.size DESC"].  Default: ""
 	 * @param limit        for pagination, Default: 200
 	 * @param withTempLink if true, the response will contain tempLink for download. Default: false
@@ -142,21 +153,21 @@ public class Nodes {
 	}
 
 	/**
-	 * Get List of all FileInfo with sort="" and limit=200 and tempLink=true and asset=NONE
+	 * get File Metadata with withAsset="ALL" and withTempLink = true
 	 *
-	 * @param acdSession
-	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
+	 * @param acdSession ACDSession
+	 * @param id         Node ID
 	 * @return
 	 */
-	public static FileInfoList getFileInfoLists(ACDSession acdSession, String startToken) {
-		return getFileInfoLists(acdSession, startToken, null, null, true, null);
+	public static FileInfo getFileMetadata(ACDSession acdSession, String id) {
+		return getFileMetadata(acdSession, id, true, "ALL");
 	}
 
 	/**
 	 * get File Metadata
 	 *
-	 * @param acdSession
-	 * @param id
+	 * @param acdSession   ACDSession
+	 * @param id           Node ID
 	 * @param withTempLink if true, the response will contain tempLink for download. Default: false
 	 * @param withAsset    "ALL", "NONE". Default: "NONE"
 	 * @return
@@ -181,21 +192,10 @@ public class Nodes {
 	}
 
 	/**
-	 * get File Metadata with withAsset="ALL" and withTempLink = true
-	 *
-	 * @param acdSession
-	 * @param id
-	 * @return
-	 */
-	public static FileInfo getFileMetadata(ACDSession acdSession, String id) {
-		return getFileMetadata(acdSession, id, true, "ALL");
-	}
-
-	/**
 	 * update File Metadata, only accept name, description and labels
 	 *
-	 * @param acdSession
-	 * @param fileInfo
+	 * @param acdSession ACDSession
+	 * @param fileInfo   File Info
 	 * @return
 	 */
 	public static FileInfo updateFileMetadata(ACDSession acdSession, FileInfo fileInfo) {
@@ -219,7 +219,7 @@ public class Nodes {
 	/**
 	 * Get root folder
 	 *
-	 * @param acdSession
+	 * @param acdSession ACDSession
 	 * @return
 	 */
 	public static FolderInfo getRootFolder(ACDSession acdSession) {
@@ -236,15 +236,15 @@ public class Nodes {
 	}
 
 	/**
-	 * Create Folder by <code>folderInfo</code><br />
-	 * name is required. <br />
-	 * kind must be <code>FOLDER</code>. <br />
-	 * description is optional. <br />
-	 * labels is optional. <br />
-	 * parents is optional. <br />
+	 * Create Folder by <code>folderInfo</code><br>
+	 * name is required. <br>
+	 * kind must be <code>FOLDER</code>. <br>
+	 * description is optional. <br>
+	 * labels is optional. <br>
+	 * parents is optional. <br>
 	 *
-	 * @param acdSession
-	 * @param folderInfo create folder according to <code>folderInfo</code>.
+	 * @param acdSession ACDSession
+	 * @param folderInfo Folder Info create folder according to <code>folderInfo</code>.
 	 * @return the created <code>FolderInfo</code>
 	 */
 	public static FolderInfo createFolder(ACDSession acdSession, FolderInfo folderInfo) {
@@ -271,8 +271,8 @@ public class Nodes {
 	/**
 	 * get Folder metadata
 	 *
-	 * @param acdSession
-	 * @param id
+	 * @param acdSession ACDSession
+	 * @param id         Node ID
 	 * @return
 	 */
 	public static FolderInfo getFolderMetadata(ACDSession acdSession, String id) {
@@ -290,8 +290,8 @@ public class Nodes {
 	/**
 	 * update Folder Metadata, only accept name, description and labels
 	 *
-	 * @param acdSession
-	 * @param folderInfo
+	 * @param acdSession ACDSession
+	 * @param folderInfo Folder Info
 	 * @return
 	 */
 	public static FolderInfo updateFolderMetadata(ACDSession acdSession, FolderInfo folderInfo) {
@@ -315,7 +315,7 @@ public class Nodes {
 	/**
 	 * Get List of all FolderInfo. each query return 200 max FolderInfo
 	 *
-	 * @param acdSession
+	 * @param acdSession ACDSession
 	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
 	 * @return
 	 */
@@ -339,9 +339,9 @@ public class Nodes {
 	/**
 	 * Add child to <code>parent</code> Node.
 	 *
-	 * @param acdSession
-	 * @param parent
-	 * @param child
+	 * @param acdSession ACDSession
+	 * @param parent     Parent
+	 * @param child      Child
 	 */
 	public static void addChildToNode(ACDSession acdSession, NodeInfo parent, NodeInfo child) {
 		Log.d(Utils.getCurrentMethodName());
@@ -356,9 +356,9 @@ public class Nodes {
 	/**
 	 * remove child from <code>parent</code> Node.
 	 *
-	 * @param acdSession
-	 * @param parent
-	 * @param child
+	 * @param acdSession ACDSession
+	 * @param parent     Parent
+	 * @param child      Child
 	 */
 	public static void removeChildFromNode(ACDSession acdSession, NodeInfo parent, NodeInfo child) {
 		Log.d(Utils.getCurrentMethodName());
@@ -373,10 +373,23 @@ public class Nodes {
 	}
 
 	/**
+	 * Get child list of target <code>parent</code>, with filters=kind:(FOLDER* OR FILE*)
+	 *
+	 * @param acdSession ACDSession
+	 * @param parent     Parent Parent    target node
+	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
+	 * @return
+	 */
+	public static NodeInfoList getChildList(ACDSession acdSession, NodeInfo parent, String
+		startToken) {
+		return getChildList(acdSession, parent, "kind:(FOLDER* OR FILE*)", startToken);
+	}
+
+	/**
 	 * Get List of target <code>parent</code> Node, each query return max to 200 Node.
 	 *
-	 * @param acdSession
-	 * @param parent     target Node
+	 * @param acdSession ACDSession
+	 * @param parent     Parent target Node
 	 * @param filters    filter return result, Example: kind:(FOLDER* OR FILE*)
 	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
 	 */
@@ -416,23 +429,10 @@ public class Nodes {
 	}
 
 	/**
-	 * Get child list of target <code>parent</code>, with filters=kind:(FOLDER* OR FILE*)
-	 *
-	 * @param acdSession
-	 * @param parent     target node
-	 * @param startToken <code>nextToken</code> from previous request for access more content. Default: null
-	 * @return
-	 */
-	public static NodeInfoList getChildList(ACDSession acdSession, NodeInfo parent, String
-		startToken) {
-		return getChildList(acdSession, parent, "kind:(FOLDER* OR FILE*)", startToken);
-	}
-
-	/**
 	 * add property to <code>node</code> in <code>owner</code> group.
 	 *
-	 * @param acdSession
-	 * @param node
+	 * @param acdSession ACDSession
+	 * @param node       Node
 	 * @param property   require key and value.
 	 * @return
 	 */
@@ -453,9 +453,9 @@ public class Nodes {
 	/**
 	 * Get all properties of <code>node</code> with target <code>owner</code> Group.
 	 *
-	 * @param acdSession
-	 * @param node
-	 * @param owner      can't be null.
+	 * @param acdSession ACDSession
+	 * @param node       Node
+	 * @param owner      Owner      can't be null.
 	 * @return
 	 */
 	public static Properties getProperties(ACDSession acdSession, NodeInfo node, String owner) {
@@ -473,10 +473,10 @@ public class Nodes {
 	/**
 	 * Get Property value of <code>node</code> by <code>property</code>.
 	 *
-	 * @param acdSession
-	 * @param node
-	 * @param owner
-	 * @param key
+	 * @param acdSession ACDSession
+	 * @param node       Node
+	 * @param owner      Owner
+	 * @param key        Key
 	 * @return
 	 */
 	public static Property getProperty(ACDSession acdSession, NodeInfo node, String owner, String key) {
@@ -495,9 +495,9 @@ public class Nodes {
 	/**
 	 * Delete target <code>property</code> in <code>node</code>.
 	 *
-	 * @param acdSession
-	 * @param node
-	 * @param key
+	 * @param acdSession ACDSession
+	 * @param node       Node
+	 * @param key        Key
 	 */
 	public static void deleteProperty(ACDSession acdSession, NodeInfo node, String key) {
 		Log.d(Utils.getCurrentMethodName());
