@@ -1,3 +1,4 @@
+![Maven Repository](https://maven-badges.herokuapp.com/maven-central/org.yetiz.lib/ACD-JAPI/badge.png)
 [![Build Status](https://travis-ci.org/yetisno/ACD-JAPI.svg?branch=master)](https://travis-ci.org/yetisno/ACD-JAPI)
 # ACD-JAPI
 ## Amazon Cloud Drive Java API (unofficial)
