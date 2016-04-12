@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/yetisno/ACD-JAPI.svg?branch=master)](https://travis-ci.org/yetisno/ACD-JAPI)
 # ACD-JAPI
 ## Amazon Cloud Drive Java API (unofficial)
 This project provide a Java version of Amazon Cloud Drive API from REST version.
