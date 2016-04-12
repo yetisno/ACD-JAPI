@@ -4,6 +4,6 @@ jdk:
 os:
   - linux
 install:
-- ./gradlew assemble
+- ./gradlew assemble -PossrhUsername="${ossrhUsername}" -PossrhPassword="${ossrhPassword}"
 script:
-- ./gradlew check
+- ./gradlew check -PossrhUsername="${ossrhUsername}" -PossrhPassword="${ossrhPassword}"
