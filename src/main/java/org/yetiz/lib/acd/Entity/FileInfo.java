@@ -10,6 +10,10 @@ public class FileInfo extends NodeInfo {
 	protected AssetInfo[] assets = new AssetInfo[]{};
 	protected ContentProperties contentProperties = null;
 
+	public AssetInfo[] getAssets() {
+		return assets;
+	}
+
 	public FileInfo() {
 		kind = "FILE";
 	}

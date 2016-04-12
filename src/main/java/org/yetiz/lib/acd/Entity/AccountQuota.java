@@ -13,8 +13,40 @@ public class AccountQuota {
 	private String[] grants;
 	private Benefit[] benefits;
 
+	public Long getQuota() {
+		return quota;
+	}
+
+	public Date getLastCalculated() {
+		return lastCalculated;
+	}
+
+	public Long getAvailable() {
+		return available;
+	}
+
+	public String[] getPlans() {
+		return plans;
+	}
+
+	public String[] getGrants() {
+		return grants;
+	}
+
+	public Benefit[] getBenefits() {
+		return benefits;
+	}
+
 	public class Benefit {
 		private Date expiration;
 		private String benefit;
+
+		public Date getExpiration() {
+			return expiration;
+		}
+
+		public String getBenefit() {
+			return benefit;
+		}
 	}
 }

@@ -4,14 +4,15 @@ import org.yetiz.lib.acd.ACD;
 import org.yetiz.lib.acd.ACDSession;
 import org.yetiz.lib.acd.ACDToken;
 import org.yetiz.lib.acd.Configure;
-import org.yetiz.lib.acd.Entity.FileInfo;
-import org.yetiz.lib.acd.Entity.FolderInfo;
+import org.yetiz.lib.acd.Entity.*;
+import org.yetiz.lib.acd.api.v1.Nodes;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by yeti on 2015/4/13.
@@ -67,7 +68,7 @@ public class MainSampleClass {
 
 	public static void download(InputStream inputStream) {
 		try {
-			FileOutputStream fileOutputStream = new FileOutputStream(new File("/home/yeti/Downloads/i5e62nT2.jpg"));
+			FileOutputStream fileOutputStream = new FileOutputStream(new File("/Users/yeti/Downloads/i5e62nT2.jpg"));
 			int read = 0;
 			byte[] buffer = new byte[256];
 			while (true) {
@@ -85,14 +86,26 @@ public class MainSampleClass {
 	}
 
 	public static void main(String[] args) {
-		String testFilePath = "/home/yeti/Downloads/1.jpg";
-		String testReplaceFilePath = "/home/yeti/Downloads/2.jpg";
+		String testFilePath = "/Users/yeti/Downloads/1.jpg";
+		String testReplaceFilePath = "/Users/yeti/Downloads/2.jpg";
 		Configure configure = getConfigure(args);
 		ACDSession acdSession = getACDSession(args, configure);
 		ACD acd = new ACD(acdSession);
-		acd.getUserInfo();
-		acd.getUserUsage();
-		acd.getUserQuota();
+		AccountInfo info = acd.getUserInfo();
+		AccountUsage usage = acd.getUserUsage();
+		AccountQuota quota = acd.getUserQuota();
+		FolderInfo rootFolder = Nodes.getRootFolder(acdSession);
+		NodeInfoList infoList = Nodes.getChildList(acdSession, rootFolder, null);
+		List<NodeInfo> nodeInfos = infoList.getList();
+		for (int i = 0; i < nodeInfos.size(); i++) {
+			if (nodeInfos.get(i).getName().equals("Test")){
+				acd.removeFolder(nodeInfos.get(i).getId());
+			}
+			if (nodeInfos.get(i).getName().equals("Test2")){
+				acd.removeFolder(nodeInfos.get(i).getId());
+			}
+		}
+
 		FolderInfo folderInfo = acd.createFolder(null, "Test");
 		folderInfo = acd.renameFolder(folderInfo.getId(), "Test2");
 		folderInfo = acd.removeFolder(folderInfo.getId());
