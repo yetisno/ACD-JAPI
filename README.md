@@ -4,6 +4,20 @@
 ## Amazon Cloud Drive Java API (unofficial)
 This project provide a Java version of Amazon Cloud Drive API from REST version.
 
+## Maven Repository
+
+Maven
+    
+    <dependency>
+        <groupId>org.yetiz.lib</groupId>
+        <artifactId>ACD-JAPI</artifactId>
+        <version>1.1.1</version>
+    </dependency>
+
+Gradle
+
+    compile 'org.yetiz.lib:ACD-JAPI:1.1.1'
+
 ## Usage
 ### Configure file
 
