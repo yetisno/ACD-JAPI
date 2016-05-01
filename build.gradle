@@ -87,52 +87,51 @@ artifacts {
     archives javadocJar, sourcesJar, manifastJar
 }
 
-
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-
-            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-
-            pom.project {
-                name archivesBaseName
-                packaging 'jar'
-                description 'This project provide a Java version of Amazon Cloud Drive API from REST version.'
-                url 'https://github.com/yetisno/ACD-JAPI'
-
-                scm {
-                    url 'scm:git@github.com:yetisno/ACD-JAPI.git'
-                    connection 'scm:git@github.com:yetisno/ACD-JAPI.git'
-                    developerConnection 'scm:git@github.com:yetisno/ACD-JAPI.git'
-                }
-
-                licenses {
-                    license {
-                        name 'The MIT License (MIT)'
-                        url 'http://www.opensource.org/licenses/mit-license.php'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'yetisno'
-                        name 'Yeti Sno'
-                        email 'yeti@yetiz.org'
-                    }
-                }
-            }
-        }
-    }
-
-    signing {
+//uploadArchives {
+//    repositories {
+//        mavenDeployer {
+//            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+//
+//            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+//                authentication(userName: ossrhUsername, password: ossrhPassword)
+//            }
+//
+//            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+//                authentication(userName: ossrhUsername, password: ossrhPassword)
+//            }
+//
+//            pom.project {
+//                name archivesBaseName
+//                packaging 'jar'
+//                description 'This project provide a Java version of Amazon Cloud Drive API from REST version.'
+//                url 'https://github.com/yetisno/ACD-JAPI'
+//
+//                scm {
+//                    url 'scm:git@github.com:yetisno/ACD-JAPI.git'
+//                    connection 'scm:git@github.com:yetisno/ACD-JAPI.git'
+//                    developerConnection 'scm:git@github.com:yetisno/ACD-JAPI.git'
+//                }
+//
+//                licenses {
+//                    license {
+//                        name 'The MIT License (MIT)'
+//                        url 'http://www.opensource.org/licenses/mit-license.php'
+//                    }
+//                }
+//
+//                developers {
+//                    developer {
+//                        id 'yetisno'
+//                        name 'Yeti Sno'
+//                        email 'yeti@yetiz.org'
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    signing {
 //        sign configurations.archives
-    }
-
-}
+//    }
+//
+//}
