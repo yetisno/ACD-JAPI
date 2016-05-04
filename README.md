@@ -49,7 +49,7 @@ Follow HowTo section to get `access_token` and `refresh_token`
 
 (**) for all API operation. 
 ### HowTo
-Sample run Class is `org.yetiz.lib.acd.sample.MainSampleClass`
+Sample run Class is `example.MainSampleClass`
 
 To start using it, you should have amazon account and request a secret profile then add to CloudDrive whitelist.
 Please visit [Getting Started](https://developer.amazon.com/public/apis/experience/cloud-drive/content/getting-started#register) for more detail.

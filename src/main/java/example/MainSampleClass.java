@@ -1,4 +1,4 @@
-package org.yetiz.lib.acd.sample;
+package example;
 
 import org.yetiz.lib.acd.ACD;
 import org.yetiz.lib.acd.ACDSession;

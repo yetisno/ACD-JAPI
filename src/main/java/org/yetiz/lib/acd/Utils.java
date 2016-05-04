@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ning.http.client.Response;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.yetiz.lib.acd.exception.BadContentException;
 
 import java.io.IOException;
@@ -78,5 +79,13 @@ public class Utils {
 
 	public static String getCurrentClassName() {
 		return Thread.currentThread().getStackTrace()[2].getClassName();
+	}
+
+	public static void print(Object object) {
+		System.out.println(ObjectFieldsToString(object));
+	}
+
+	public static String ObjectFieldsToString(Object object) {
+		return ReflectionToStringBuilder.toString(object);
 	}
 }
