@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ning.http.client.Request;
-import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 import com.ning.http.client.multipart.FilePart;
 import com.ning.http.client.multipart.StringPart;
@@ -20,6 +19,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static org.yetiz.lib.acd.Utils.newFollowRedirectRequestBuilder;
 
 /**
  * Created by yeti on 2015/4/13.
@@ -44,7 +45,7 @@ public class Nodes {
 		createStructure.parents = uploadedFileInfo.getParents();
 		createStructure.labels = uploadedFileInfo.getLabels();
 		createStructure.description = null;
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getContentUrl(resourceEndpoint))
 			.setMethod("POST")
 			.addBodyPart(new StringPart("metadata", Utils.getGson().toJson(createStructure)))
@@ -67,7 +68,7 @@ public class Nodes {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", overwritedFileInfo.getId(), "/content");
 		CreateStructure createStructure = new CreateStructure();
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getContentUrl(resourceEndpoint))
 			.setMethod("PUT")
 			.addBodyPart(new FilePart("content", uploadFile))
@@ -88,7 +89,7 @@ public class Nodes {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", downloadedFileInfo.getId(), "/content");
 		CreateStructure createStructure = new CreateStructure();
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getContentUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build();
@@ -144,7 +145,7 @@ public class Nodes {
 		if (withAsset != null) {
 			resourceEndpoint = Utils.stringFormatter("{}&asset={}", resourceEndpoint, withAsset);
 		}
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -182,7 +183,7 @@ public class Nodes {
 		if (withAsset != null && withAsset != "") {
 			resourceEndpoint = Utils.stringAppender(resourceEndpoint, "&asset=", withAsset);
 		}
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -206,7 +207,7 @@ public class Nodes {
 		patchStructure.description = fileInfo.getDescription();
 		patchStructure.labels = fileInfo.getLabels();
 		String body = Utils.getGson().toJson(patchStructure);
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("PATCH")
 			.setBody(body)
@@ -225,7 +226,7 @@ public class Nodes {
 	public static FolderInfo getRootFolder(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "?filters=isRoot:true");
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -257,7 +258,7 @@ public class Nodes {
 		createStructure.kind = "FOLDER";
 		createStructure.parents = folderInfo.getParents();
 		String body = Utils.getGson().toJson(createStructure);
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("POST")
 			.setBody(body)
@@ -278,7 +279,7 @@ public class Nodes {
 	public static FolderInfo getFolderMetadata(ACDSession acdSession, String id) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", id);
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -302,7 +303,7 @@ public class Nodes {
 		patchStructure.description = folderInfo.getDescription();
 		patchStructure.labels = folderInfo.getLabels();
 		String body = Utils.getGson().toJson(patchStructure);
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("PATCH")
 			.setBody(body)
@@ -326,7 +327,7 @@ public class Nodes {
 		if (startToken != null) {
 			resourceEndpoint = Utils.stringFormatter("{}&startToken={}", resourceEndpoint, startToken);
 		}
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -346,7 +347,7 @@ public class Nodes {
 	public static void addChildToNode(ACDSession acdSession, NodeInfo parent, NodeInfo child) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", parent.getId(), "/children/", child.getId());
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("PUT")
 			.build();
@@ -363,7 +364,7 @@ public class Nodes {
 	public static void removeChildFromNode(ACDSession acdSession, NodeInfo parent, NodeInfo child) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", parent.getId(), "/children/", child.getId());
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("DELETE")
 			.build();
@@ -403,7 +404,7 @@ public class Nodes {
 		if (startToken != null) {
 			resourceEndpoint = Utils.stringFormatter("{}&startToken={}", resourceEndpoint, startToken);
 		}
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -441,7 +442,7 @@ public class Nodes {
 		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/",
 			acdSession.getConfigure().getOwner(), "/",
 			property.getKey());
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setBody(Utils.stringFormatter("{\"value\":\"{}\"}", property.getValue()))
 			.setMethod("PUT")
@@ -461,7 +462,7 @@ public class Nodes {
 	public static Properties getProperties(ACDSession acdSession, NodeInfo node, String owner) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/", owner);
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -483,7 +484,7 @@ public class Nodes {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/", owner, "/",
 			key);
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -503,7 +504,7 @@ public class Nodes {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringAppender(root, "/", node.getId(), "/properties/",
 			acdSession.getConfigure().getOwner(), "/", key);
-		acdSession.execute(new RequestBuilder()
+		acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("DELETE")
 			.build());

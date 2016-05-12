@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.ning.http.client.Request;
-import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 import org.yetiz.lib.acd.ACDSession;
 import org.yetiz.lib.acd.Entity.*;
@@ -14,6 +13,8 @@ import org.yetiz.lib.utils.Log;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import static org.yetiz.lib.acd.Utils.newFollowRedirectRequestBuilder;
 
 /**
  * Created by yeti on 2015/4/13.
@@ -31,7 +32,7 @@ public class Trash {
 	public static NodeInfo moveNodeToTrash(ACDSession acdSession, NodeInfo node) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringFormatter("{}/{}", root, node.getId());
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setBody("{}")
 			.setMethod("PUT")
@@ -64,7 +65,7 @@ public class Trash {
 		if (startToken != null) {
 			resourceEndpoint = Utils.stringFormatter("{}&startToken={}", resourceEndpoint, startToken);
 		}
-		Response response = acdSession.execute(new RequestBuilder()
+		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -100,7 +101,7 @@ public class Trash {
 	public static NodeInfo restore(ACDSession acdSession, NodeInfo node) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringFormatter("{}/{}/restore", root, node.getId());
-		Request request = new RequestBuilder()
+		Request request = newFollowRedirectRequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("POST")
 			.build();

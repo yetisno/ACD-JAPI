@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.yetiz.lib.acd.exception.BadContentException;
@@ -87,5 +88,9 @@ public class Utils {
 
 	public static String ObjectFieldsToString(Object object) {
 		return ReflectionToStringBuilder.toString(object);
+	}
+
+	public static final RequestBuilder newFollowRedirectRequestBuilder() {
+		return new RequestBuilder().setFollowRedirects(true);
 	}
 }
