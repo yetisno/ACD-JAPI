@@ -11,12 +11,12 @@ Maven
     <dependency>
         <groupId>org.yetiz.lib</groupId>
         <artifactId>ACD-JAPI</artifactId>
-        <version>1.1.1</version>
+        <version>1.1.2</version>
     </dependency>
 
 Gradle
 
-    compile 'org.yetiz.lib:ACD-JAPI:1.1.1'
+    compile 'org.yetiz.lib:ACD-JAPI:1.1.2'
 
 ## Usage
 ### Configure file
