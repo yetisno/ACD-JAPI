@@ -1,5 +1,6 @@
 package org.yetiz.lib.acd.api.v1;
 
+import com.ning.http.client.RequestBuilder;
 import com.ning.http.client.Response;
 import org.yetiz.lib.acd.ACDSession;
 import org.yetiz.lib.acd.Entity.AccountInfo;
@@ -8,8 +9,6 @@ import org.yetiz.lib.acd.Entity.AccountUsage;
 import org.yetiz.lib.acd.Entity.Endpoint;
 import org.yetiz.lib.acd.Utils;
 import org.yetiz.lib.utils.Log;
-
-import static org.yetiz.lib.acd.Utils.newFollowRedirectRequestBuilder;
 
 /**
  * Created by yeti on 2015/4/13.
@@ -20,7 +19,7 @@ public class Account {
 	public static Endpoint getEndpoint(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringFormatter("{}/endpoint", root);
-		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
+		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -31,7 +30,7 @@ public class Account {
 	public static AccountInfo getAccountInfo(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringFormatter("{}/info", root);
-		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
+		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -42,7 +41,7 @@ public class Account {
 	public static AccountQuota getAccountQuota(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringFormatter("{}/quota", root);
-		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
+		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
@@ -53,7 +52,7 @@ public class Account {
 	public static AccountUsage getAccountUsage(ACDSession acdSession) {
 		Log.d(Utils.getCurrentMethodName());
 		String resourceEndpoint = Utils.stringFormatter("{}/usage", root);
-		Response response = acdSession.execute(newFollowRedirectRequestBuilder()
+		Response response = acdSession.execute(new RequestBuilder()
 			.setUrl(acdSession.getMetadataUrl(resourceEndpoint))
 			.setMethod("GET")
 			.build());
