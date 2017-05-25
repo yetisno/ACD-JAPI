@@ -103,6 +103,17 @@ public class ACD {
 		return ((FileInfo) Trash.restore(acdSession, new FileInfo(id)));
 	}
 
+
+	/**
+	 * delete file
+	 *
+	 * @param id
+	 * @return
+	 */
+	public FileInfo getFileMetadata(String id) {
+		return Nodes.getFileMetadata(acdSession, id);
+	}
+
 	/**
 	 * create folder
 	 *
