@@ -203,6 +203,9 @@ public class ACDSession {
 	}
 
 	private void updateTokenOfConfigureFile() {
+        if (configure.hasRefresher()) {
+            configure.refresh(acdToken.getRefreshToken());
+        }
 		if (!configure.isAutoConfigureUpdate())
 			return;
 		configure.setTokenType(acdToken.getTokenType());

@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.function.Consumer;
 
 /**
  * Created by yeti on 2015/4/14.
@@ -24,6 +25,7 @@ public class Configure {
 	private String access_token = "";
 	private String refresh_token = "";
 	private String redirect_uri = "http://localhost";
+    private Consumer<String> refresher;
 
 	public static Configure load(File configureFile) {
 		Properties properties = new Properties();
@@ -78,6 +80,18 @@ public class Configure {
 		} catch (IOException e) {
 		}
 	}
+
+    public void setRefresher(Consumer<String> refresher) {
+        this.refresher = refresher;
+    }
+
+    public boolean hasRefresher() {
+        return refresher != null;
+    }
+
+    public void refresh(String token) {
+        refresher.accept(token);
+    }
 
 	public String getName() {
 		return name;
