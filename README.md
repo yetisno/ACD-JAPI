@@ -1,5 +1,6 @@
-![Maven Repository](https://maven-badges.herokuapp.com/maven-central/org.yetiz.lib/ACD-JAPI/badge.png)
-[![Build Status](https://travis-ci.org/yetisno/ACD-JAPI.svg?branch=master)](https://travis-ci.org/yetisno/ACD-JAPI)
+[![Release](https://jitpack.io/v/umjammer/ACD-JAPI.svg)](https://jitpack.io/#umjammer/ACD-JAPI)
+ [![Java CI with Maven](https://github.com/umjammer/ACD-JAPI/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/umjammer/ACD-JAPI/actions)
+
 # ACD-JAPI
 ## Amazon Cloud Drive Java API (unofficial)
 This project provide a Java version of Amazon Cloud Drive API from REST version.
