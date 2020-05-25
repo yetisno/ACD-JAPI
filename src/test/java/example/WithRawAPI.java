@@ -24,7 +24,7 @@ public class WithRawAPI {
 	}
 
 	public static void main(String[] args) {
-		String uploadFilePath = "/Users/yeti/Downloads/1.jpg";
+		String uploadFilePath = "src/test/resources/1.jpg";
 		String uploadFileName = "ACD-JAPI-TEST.jpg";
 		String uploadFolderName = "ACD-JAPI-TEST";
 		Configure configure = getConfigure(args);

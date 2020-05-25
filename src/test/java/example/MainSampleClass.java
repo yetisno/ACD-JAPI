@@ -68,7 +68,7 @@ public class MainSampleClass {
 
 	public static void download(InputStream inputStream) {
 		try {
-			FileOutputStream fileOutputStream = new FileOutputStream(new File("/Users/yeti/Downloads/i5e62nT2.jpg"));
+			FileOutputStream fileOutputStream = new FileOutputStream(new File("tmp/i5e62nT2.jpg"));
 			int read = 0;
 			byte[] buffer = new byte[256];
 			while (true) {
@@ -86,8 +86,8 @@ public class MainSampleClass {
 	}
 
 	public static void main(String[] args) {
-		String testFilePath = "/Users/yeti/Downloads/1.jpg";
-		String testReplaceFilePath = "/Users/yeti/Downloads/2.jpg";
+		String testFilePath = "src/test/resources/1.jpg";
+		String testReplaceFilePath = "src/test/resources/2.jpg";
 		Configure configure = getConfigure(args);
 		ACDSession acdSession = getACDSession(args, configure);
 		ACD acd = new ACD(acdSession);

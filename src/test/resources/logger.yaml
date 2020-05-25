@@ -1,0 +1,39 @@
+Configuration:
+  status: error
+
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        Pattern: "[%d{ISO8601}][%5p][%t][%c{1.}] >> %m%n"
+
+    RollingRandomAccessFile:
+      name: File
+      fileName: logs/current.log
+      filePattern: "logs/archives/$${date:yyyy-MM}/%d{yyyy-MM-dd-HH}.%i.log.gz"
+      PatternLayout:
+        Pattern: "[%d{ISO8601}][%5p][%t][%c{1.}] >> %m%n"
+      Policies:
+        SizeBasedTriggeringPolicy:
+          size: "10MB"
+
+    Socket:
+      name: UDP
+      host: 192.168.95.57
+      port: 5140
+      protocol: UDP
+      PatternLayout:
+        Pattern: "<190> %d{MMM dd HH:mm:ss} ${hostName} %c{1}: %t %5p %c{1.} TPRS ${hostName} [[%m"
+
+    Async:
+      name: Async
+      AppenderRef:
+      - ref: Console
+      - ref: File
+
+  Loggers:
+    Root:
+      level: debug
+      AppenderRef:
+        ref: Async
