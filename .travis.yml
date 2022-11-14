@@ -1,9 +1,0 @@
-language: java
-jdk:
-- oraclejdk8
-os:
-  - linux
-install:
-- ./gradlew assemble -PossrhUsername="${ossrhUsername}" -PossrhPassword="${ossrhPassword}"
-script:
-- ./gradlew check -PossrhUsername="${ossrhUsername}" -PossrhPassword="${ossrhPassword}"

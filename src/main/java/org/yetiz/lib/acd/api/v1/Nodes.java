@@ -1,25 +1,35 @@
 package org.yetiz.lib.acd.api.v1;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.ning.http.client.Request;
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
-import com.ning.http.client.multipart.FilePart;
-import com.ning.http.client.multipart.StringPart;
-import org.yetiz.lib.acd.ACDSession;
-import org.yetiz.lib.acd.Entity.*;
-import org.yetiz.lib.acd.Utils;
-import org.yetiz.lib.acd.exception.BadContentException;
-import org.yetiz.lib.utils.Log;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.yetiz.lib.acd.ACDSession;
+import org.yetiz.lib.acd.Utils;
+import org.yetiz.lib.acd.Entity.AssetInfo;
+import org.yetiz.lib.acd.Entity.FileInfo;
+import org.yetiz.lib.acd.Entity.FileInfoList;
+import org.yetiz.lib.acd.Entity.FolderInfo;
+import org.yetiz.lib.acd.Entity.FolderInfoList;
+import org.yetiz.lib.acd.Entity.NodeInfo;
+import org.yetiz.lib.acd.Entity.NodeInfoList;
+import org.yetiz.lib.acd.Entity.Properties;
+import org.yetiz.lib.acd.Entity.Property;
+import org.yetiz.lib.acd.exception.BadContentException;
+import org.yetiz.lib.utils.Log;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.ning.http.client.Request;
+import com.ning.http.client.RequestBuilder;
+import com.ning.http.client.Response;
+import com.ning.http.client.multipart.ByteArrayPart;
+import com.ning.http.client.multipart.FilePart;
+import com.ning.http.client.multipart.StringPart;
 
 /**
  * Created by yeti on 2015/4/13.
@@ -49,6 +59,34 @@ public class Nodes {
 			.setMethod("POST")
 			.addBodyPart(new StringPart("metadata", Utils.getGson().toJson(createStructure)))
 			.addBodyPart(new FilePart("content", uploadFile))
+			.build();
+		Response response = acdSession.execute(request);
+		FileInfo rtnProperties = Utils.getGson().fromJson(Utils.getResponseBody(response), FileInfo.class);
+		return rtnProperties;
+	}
+
+	/**
+	 * Upload file
+	 *
+	 * @param acdSession       ACDSession ACDSession
+	 * @param uploadedFileInfo name and kind are required. labels, properties and parents are optional.
+	 * @param uploadStream       Upload File stream
+	 * @return
+	 */
+	public static FileInfo uploadFile(ACDSession acdSession, FileInfo uploadedFileInfo, InputStream uploadStream) {
+		Log.d(Utils.getCurrentMethodName());
+		String resourceEndpoint = root + "?suppress=deduplication";
+		CreateStructure createStructure = new CreateStructure();
+		createStructure.name = uploadedFileInfo.getName();
+		createStructure.kind = uploadedFileInfo.getKind();
+		createStructure.parents = uploadedFileInfo.getParents();
+		createStructure.labels = uploadedFileInfo.getLabels();
+		createStructure.description = null;
+		Request request = new RequestBuilder()
+			.setUrl(acdSession.getContentUrl(resourceEndpoint))
+			.setMethod("POST")
+			.addBodyPart(new StringPart("metadata", Utils.getGson().toJson(createStructure)))
+			.addBodyPart(new ByteArrayPart("content", null)) // TODO
 			.build();
 		Response response = acdSession.execute(request);
 		FileInfo rtnProperties = Utils.getGson().fromJson(Utils.getResponseBody(response), FileInfo.class);
