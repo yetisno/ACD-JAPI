@@ -1,5 +1,8 @@
 [![Release](https://jitpack.io/v/umjammer/ACD-JAPI.svg)](https://jitpack.io/#umjammer/ACD-JAPI)
- [![Java CI with Maven](https://github.com/umjammer/ACD-JAPI/workflows/Java%20CI%20with%20Maven/badge.svg)](https://github.com/umjammer/ACD-JAPI/actions)
+[![Java CI with Maven](https://github.com/umjammer/ACD-JAPI/actions/workflows/maven.yml/badge.svg)](https://github.com/umjammer/ACD-JAPI/actions)
+[![CodeQL](https://github.com/umjammer/ACD-JAPI/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/umjammer/ACD-JAPI/actions/workflows/codeql-analysis.yml)
+![Java](https://img.shields.io/badge/Java-8-b07219)
+[![Parent](https://img.shields.io/badge/Parent-vavi--apps--fuse-pink)](https://github.com/umjammer/vavi-apps-fuse)
 
 # ACD-JAPI
 ## Amazon Cloud Drive Java API (unofficial)
@@ -7,17 +10,9 @@ This project provide a Java version of Amazon Cloud Drive API from REST version.
 
 ## Maven Repository
 
-Maven
-    
-    <dependency>
-        <groupId>org.yetiz.lib</groupId>
-        <artifactId>ACD-JAPI</artifactId>
-        <version>1.1.2</version>
-    </dependency>
+Maven/Gradle
 
-Gradle
-
-    compile 'org.yetiz.lib:ACD-JAPI:1.1.2'
+https://jitpack.io/#umjammer/ACD-JAPI
 
 ## Usage
 ### Configure file
@@ -28,6 +23,7 @@ There are two ways to create `Configure` instance.
 2. Create a `Configure` instance and update it.
 
 #### Important
+
 name, client_id, client_secret is necessary!
 
 owner is required when use `Property` operation.
