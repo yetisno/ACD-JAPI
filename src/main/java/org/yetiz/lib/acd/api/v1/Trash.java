@@ -3,9 +3,9 @@ package org.yetiz.lib.acd.api.v1;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.ning.http.client.Request;
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
+import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
 import org.yetiz.lib.acd.ACDSession;
 import org.yetiz.lib.acd.Entity.*;
 import org.yetiz.lib.acd.Utils;
@@ -38,7 +38,7 @@ public class Trash {
 			.setMethod("PUT")
 			.build();
 		Response response = acdSession.execute(request);
-		String kind = ((JsonObject) new JsonParser().parse(Utils.getResponseBody(response))).get("kind").getAsString();
+		String kind = ((JsonObject) JsonParser.parseString(Utils.getResponseBody(response))).get("kind").getAsString();
 		NodeInfo rtnNodeInfo = null;
 		if (kind.equals("FILE")) {
 			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), FileInfo.class);
@@ -70,11 +70,10 @@ public class Trash {
 			.setMethod("GET")
 			.build());
 
-		JsonObject responseObject = ((JsonObject) new JsonParser().parse(Utils.getResponseBody(response)));
-		List<NodeInfo> data = new ArrayList<NodeInfo>();
-		for (Iterator<JsonElement> iterator = responseObject.get("data").getAsJsonArray().iterator();
-		     iterator.hasNext(); ) {
-			JsonObject object = ((JsonObject) iterator.next());
+		JsonObject responseObject = ((JsonObject) JsonParser.parseString(Utils.getResponseBody(response)));
+		List<NodeInfo> data = new ArrayList<>();
+		for (JsonElement jsonElement : responseObject.get("data").getAsJsonArray()) {
+			JsonObject object = ((JsonObject) jsonElement);
 			String kind = object.get("kind").getAsString();
 			if (kind.equals("FILE")) {
 				data.add(Utils.getGson().fromJson(object, FileInfo.class));
@@ -106,7 +105,7 @@ public class Trash {
 			.setMethod("POST")
 			.build();
 		Response response = acdSession.execute(request);
-		String kind = ((JsonObject) new JsonParser().parse(Utils.getResponseBody(response))).get("kind").getAsString();
+		String kind = ((JsonObject) JsonParser.parseString(Utils.getResponseBody(response))).get("kind").getAsString();
 		NodeInfo rtnNodeInfo = null;
 		if (kind.equals("FILE")) {
 			rtnNodeInfo = Utils.getGson().fromJson(Utils.getResponseBody(response), FileInfo.class);

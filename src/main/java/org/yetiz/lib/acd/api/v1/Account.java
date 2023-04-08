@@ -1,7 +1,7 @@
 package org.yetiz.lib.acd.api.v1;
 
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
 import org.yetiz.lib.acd.ACDSession;
 import org.yetiz.lib.acd.Entity.AccountInfo;
 import org.yetiz.lib.acd.Entity.AccountQuota;

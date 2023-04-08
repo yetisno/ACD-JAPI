@@ -1,10 +1,8 @@
 package org.yetiz.lib.acd.exception;
 
-import com.ning.http.client.Response;
+import org.asynchttpclient.Response;
 import org.yetiz.lib.acd.ResponseCode;
 import org.yetiz.lib.utils.Log;
-
-import java.io.IOException;
 
 /**
  * Created by yeti on 4/14/15.
@@ -14,11 +12,7 @@ public class ACDResponseException extends RuntimeException {
 	private String responseBody = "";
 
 	public ACDResponseException(Response response) {
-		try {
-			responseBody = response.hasResponseBody() ? response.getResponseBody() : response.getStatusText();
-		} catch (IOException e) {
-			throw new BadContentException(e.getMessage());
-		}
+		responseBody = response.hasResponseBody() ? response.getResponseBody() : response.getStatusText();
 		try {
 			Log.e(Class.forName(Thread.currentThread().getStackTrace()[2].getClassName()), getMessage());
 		} catch (ClassNotFoundException e) {

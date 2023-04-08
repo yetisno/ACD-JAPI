@@ -1,7 +1,13 @@
 package org.yetiz.lib.acd;
 
 import com.google.gson.JsonObject;
-import com.ning.http.client.*;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.AsyncHttpClientConfig;
+import org.asynchttpclient.DefaultAsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClientConfig;
+import org.asynchttpclient.Request;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
 import org.yetiz.lib.acd.Entity.Endpoint;
 import org.yetiz.lib.acd.api.v1.Account;
 import org.yetiz.lib.acd.exception.ACDResponseException;
@@ -10,9 +16,9 @@ import org.yetiz.lib.acd.exception.BadParameterException;
 import org.yetiz.lib.acd.exception.InvalidAuthTokenException;
 import org.yetiz.lib.utils.Log;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Calendar;
-import java.util.IllegalFormatException;
-import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by yeti on 2015/4/13.
@@ -25,10 +31,10 @@ public class ACDSession {
 	private String metadataUrl = "https://drive.amazonaws.com/drive/v1/";
 
 	private ACDSession() {
-		AsyncHttpClientConfig asyncHttpClientConfig = new AsyncHttpClientConfig.Builder()
+		AsyncHttpClientConfig asyncHttpClientConfig = new DefaultAsyncHttpClientConfig.Builder()
 			.setFollowRedirect(false)
 			.build();
-		this.asyncHttpClient = new AsyncHttpClient(asyncHttpClientConfig);
+		this.asyncHttpClient = new DefaultAsyncHttpClient(asyncHttpClientConfig);
 	}
 
 
@@ -39,19 +45,19 @@ public class ACDSession {
 	 */
 	private ACDSession(int timeoutMs) {
 		Log.d("Timeout set to " + timeoutMs);
-		AsyncHttpClientConfig asyncHttpClientConfig = new AsyncHttpClientConfig.Builder()
+		AsyncHttpClientConfig asyncHttpClientConfig = new DefaultAsyncHttpClientConfig.Builder()
 			.setFollowRedirect(false)
 			.setConnectTimeout(timeoutMs)
 			.setReadTimeout(timeoutMs)
 			.setRequestTimeout(timeoutMs)
 			.setPooledConnectionIdleTimeout(timeoutMs)
 			.build();
-		this.asyncHttpClient = new AsyncHttpClient(asyncHttpClientConfig);
+		this.asyncHttpClient = new DefaultAsyncHttpClient(asyncHttpClientConfig);
 	}
 
 	public static ACDSession getACDSessionByCode(Configure configure, String code, Integer timeout) {
 		Log.d(Utils.getCurrentMethodName());
-		if (code == null || code == "") {
+		if (code == null || code.isEmpty()) {
 			throw new AuthorizationRequiredException(configure.getClientId(), configure.getRedirectUri(), configure
 				.isWritable());
 		}
@@ -75,7 +81,7 @@ public class ACDSession {
 			throw new BadParameterException(response);
 		} else if (statusCode == 200) {
 			JsonObject object = Utils.convertBodyToJson(response);
-			Integer expires_in = object.get("expires_in").getAsInt();
+			int expires_in = object.get("expires_in").getAsInt();
 			String token_type = object.get("token_type").getAsString();
 			String refresh_token = object.get("refresh_token").getAsString();
 			String access_token = object.get("access_token").getAsString();
@@ -182,7 +188,7 @@ public class ACDSession {
 			long time = System.currentTimeMillis();
 			Response response = asyncHttpClient.executeRequest(request).get();
 			ResponseCode.check(response);
-			Log.d("Execute Time", new Long(System.currentTimeMillis() - time).toString() + "ms");
+			Log.d("Execute Time", (System.currentTimeMillis() - time) + "ms");
 			return response;
 		} catch (InvalidAuthTokenException e) {
 			if (configure.isAutoRefresh()) {
@@ -253,9 +259,12 @@ public class ACDSession {
 	}
 
 	public void destroy() {
-		asyncHttpClient.close();
+		try {
+			asyncHttpClient.close();
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
-
 
 	public Configure getConfigure() {
 		return configure;

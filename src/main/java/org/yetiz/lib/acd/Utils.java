@@ -1,35 +1,31 @@
 package org.yetiz.lib.acd;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.ning.http.client.RequestBuilder;
-import com.ning.http.client.Response;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.yetiz.lib.acd.exception.BadContentException;
-
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Date;
+import org.asynchttpclient.RequestBuilder;
+import org.asynchttpclient.Response;
 
 /**
  * Created by yeti on 2015/4/13.
  */
 public class Utils {
 	public static JsonObject convertBodyToJson(Response response) {
-		try {
-			return ((JsonObject) new JsonParser().parse(response.getResponseBody("utf-8")));
-		} catch (IOException e) {
-			throw new BadContentException();
-		}
+		return ((JsonObject) JsonParser.parseString(response.getResponseBody(StandardCharsets.UTF_8)));
 	}
 
 	public static String urlEncode(String str) {
 		String rtn = "";
 		try {
-			rtn = URLEncoder.encode(str, "UTF-8");
+			rtn = URLEncoder.encode(str, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -37,15 +33,11 @@ public class Utils {
 	}
 
 	public static String getResponseBody(Response response) {
-		try {
-			return response.getResponseBody(Utils.getCharset());
-		} catch (IOException e) {
-			throw new BadContentException();
-		}
+		return response.getResponseBody(Utils.getCharset());
 	}
 
-	public static String getCharset() {
-		return "UTF-8";
+	public static Charset getCharset() {
+		return StandardCharsets.UTF_8;
 	}
 
 
@@ -90,7 +82,7 @@ public class Utils {
 		return ReflectionToStringBuilder.toString(object);
 	}
 
-	public static final RequestBuilder newFollowRedirectRequestBuilder() {
-		return new RequestBuilder().setFollowRedirects(true);
+	public static RequestBuilder newFollowRedirectRequestBuilder() {
+		return new RequestBuilder().setFollowRedirect(true);
 	}
 }

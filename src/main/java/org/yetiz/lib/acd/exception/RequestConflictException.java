@@ -1,6 +1,6 @@
 package org.yetiz.lib.acd.exception;
 
-import com.ning.http.client.Response;
+import org.asynchttpclient.Response;
 import org.yetiz.lib.acd.ResponseCode;
 
 /**

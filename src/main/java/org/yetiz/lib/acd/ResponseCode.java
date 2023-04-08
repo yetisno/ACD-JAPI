@@ -1,6 +1,6 @@
 package org.yetiz.lib.acd;
 
-import com.ning.http.client.Response;
+import org.asynchttpclient.Response;
 import org.yetiz.lib.acd.exception.*;
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class ResponseCode {
 
-	private static Map<Integer, Class> errorList = new HashMap<Integer, Class>();
+	private static Map<Integer, Class<?>> errorList = new HashMap<>();
 
 	static {
 		errorList.put(ResponseCode.Error.BAD_PARAMETER.getValue(), BadParameterException.class);

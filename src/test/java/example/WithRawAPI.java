@@ -13,6 +13,7 @@ import org.yetiz.lib.acd.api.v1.Nodes;
 import org.yetiz.lib.acd.api.v1.Trash;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 /**
@@ -23,7 +24,7 @@ public class WithRawAPI {
 	public WithRawAPI() {
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		String uploadFilePath = "src/test/resources/1.jpg";
 		String uploadFileName = "ACD-JAPI-TEST.jpg";
 		String uploadFolderName = "ACD-JAPI-TEST";
