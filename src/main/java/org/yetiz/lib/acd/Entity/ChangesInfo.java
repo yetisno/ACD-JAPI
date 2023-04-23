@@ -10,7 +10,7 @@ public class ChangesInfo {
 	protected Boolean end = false;
 	protected String checkpoint = "";
 	protected Boolean reset = false;
-	protected List<NodeInfo> nodes = new ArrayList<NodeInfo>();
+	protected List<NodeInfo> nodes = new ArrayList<>();
 
 	public Boolean hasNext() {
 		return !isEnd();

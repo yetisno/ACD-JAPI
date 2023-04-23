@@ -7,9 +7,9 @@ import java.util.Date;
  * Created by yeti on 2015/4/13.
  */
 public class ACDToken {
-	private String token_type = "";
-	private String access_token = "";
-	private String refresh_token = "";
+	private String token_type;
+	private String access_token;
+	private String refresh_token;
 	private Date expireTime;
 
 	public ACDToken(String token_type, Date expireTime, String refresh_token, String access_token) {

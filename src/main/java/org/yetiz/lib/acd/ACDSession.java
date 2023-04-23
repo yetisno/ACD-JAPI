@@ -24,7 +24,7 @@ import java.util.Calendar;
  * Created by yeti on 2015/4/13.
  */
 public class ACDSession {
-	private AsyncHttpClient asyncHttpClient = null;
+	private AsyncHttpClient asyncHttpClient;
 	private ACDToken acdToken = null;
 	private Configure configure = null;
 	private String contentUrl = "";
@@ -99,7 +99,7 @@ public class ACDSession {
 	}
 
 	private static ACDSession newAcdSession(Integer timeout) {
-		ACDSession acdSession = null;
+		ACDSession acdSession;
 		if (timeout != null) {
 			acdSession = new ACDSession(timeout);
 		} else {
@@ -152,7 +152,7 @@ public class ACDSession {
 				configure.isWritable());
 		} else if (statusCode == 200) {
 			JsonObject object = Utils.convertBodyToJson(response);
-			Integer expires_in = object.get("expires_in").getAsInt();
+			int expires_in = object.get("expires_in").getAsInt();
 			String token_type = object.get("token_type").getAsString();
 			String refresh_token = object.get("refresh_token").getAsString();
 			String access_token = object.get("access_token").getAsString();

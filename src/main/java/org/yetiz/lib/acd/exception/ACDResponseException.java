@@ -9,7 +9,7 @@ import org.yetiz.lib.utils.Log;
  */
 public class ACDResponseException extends RuntimeException {
 	protected ResponseCode.Error statusCode;
-	private String responseBody = "";
+	private String responseBody;
 
 	public ACDResponseException(Response response) {
 		responseBody = response.hasResponseBody() ? response.getResponseBody() : response.getStatusText();

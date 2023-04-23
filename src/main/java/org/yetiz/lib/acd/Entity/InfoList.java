@@ -9,7 +9,7 @@ import java.util.List;
 public abstract class InfoList<T> {
 	protected Long count = Long.MIN_VALUE;
 	protected String nextToken = "";
-	protected List<T> data = new ArrayList<T>();
+	protected List<T> data = new ArrayList<>();
 
 	public InfoList() {
 	}

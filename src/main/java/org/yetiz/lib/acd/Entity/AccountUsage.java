@@ -45,7 +45,7 @@ public class AccountUsage {
 		}
 	}
 
-	public class Meta {
+	public static class Meta {
 		private Long bytes;
 		private Long count;
 

@@ -99,7 +99,7 @@ public class Log {
 	 * verbose
 	 *
 	 */
-	public static void t(Class clazz, String description) {
+	public static void t(Class<?> clazz, String description) {
 		getLogger(clazz.getName()).trace(" {}", description);
 	}
 
@@ -107,7 +107,7 @@ public class Log {
 	 * debug
 	 *
 	 */
-	public static void d(Class clazz, String description) {
+	public static void d(Class<?> clazz, String description) {
 		getLogger(clazz.getName()).debug(" {}", description);
 	}
 
@@ -115,7 +115,7 @@ public class Log {
 	 * info
 	 *
 	 */
-	public static void i(Class clazz, String description) {
+	public static void i(Class<?> clazz, String description) {
 		getLogger(clazz.getName()).info(" {}", description);
 	}
 
@@ -123,7 +123,7 @@ public class Log {
 	 * warning
 	 *
 	 */
-	public static void w(Class clazz, String description) {
+	public static void w(Class<?> clazz, String description) {
 		getLogger(clazz.getName()).warn(" {}", description);
 	}
 
@@ -131,7 +131,7 @@ public class Log {
 	 * error
 	 *
 	 */
-	public static void e(Class clazz, String description) {
+	public static void e(Class<?> clazz, String description) {
 		getLogger(clazz.getName()).error(" {}", description);
 	}
 }

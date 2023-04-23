@@ -11,7 +11,7 @@ import java.util.Map;
 public class Properties {
 	protected Integer statusCode = Integer.MIN_VALUE;
 	protected String owner = "CloudDrive";
-	protected Map<String, String> data = new HashMap<String, String>();
+	protected Map<String, String> data = new HashMap<>();
 	protected List<Property> properties;
 
 	public Integer getStatusCode() {
@@ -27,7 +27,7 @@ public class Properties {
 	}
 
 	public List<Property> get() {
-		properties = new ArrayList<Property>();
+		properties = new ArrayList<>();
 		if (data.size() > 0) {
 			Property property;
 			for (Map.Entry<String, String> entry : data.entrySet()) {

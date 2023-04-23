@@ -60,10 +60,10 @@ public class ResponseCode {
 		SERVICE_UNAVAILABLE(503, "Service Unavailable.");
 
 
-		private int value;
-		private String description;
+		private final int value;
+		private final String description;
 
-		private Error(int value, String description) {
+		Error(int value, String description) {
 			this.value = value;
 			this.description = description;
 		}

@@ -37,7 +37,7 @@ public class AccountQuota {
 		return benefits;
 	}
 
-	public class Benefit {
+	public static class Benefit {
 		private Date expiration;
 		private String benefit;
 

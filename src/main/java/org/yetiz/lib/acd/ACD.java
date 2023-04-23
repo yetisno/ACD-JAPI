@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class ACD {
 
-	private ACDSession acdSession = null;
+	private ACDSession acdSession;
 
 	public ACD(ACDSession acdSession) {
 		this.acdSession = acdSession;
@@ -152,9 +152,8 @@ public class ACD {
 	}
 
 	private List<NodeInfo> getList(String id, String startToken) {
-		List<NodeInfo> rtnList = new ArrayList<NodeInfo>();
 		NodeInfoList nodeInfoList = Nodes.getChildList(acdSession, new FolderInfo(id), startToken);
-		rtnList.addAll(nodeInfoList.getList());
+		List<NodeInfo> rtnList = new ArrayList<>(nodeInfoList.getList());
 		if (nodeInfoList.hasNext()) {
 			rtnList.addAll(getList(id, nodeInfoList.getNextToken()));
 		}

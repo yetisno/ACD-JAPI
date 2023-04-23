@@ -1,10 +1,8 @@
 package org.yetiz.lib.acd.api.v1;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.asynchttpclient.Request;
@@ -24,7 +22,6 @@ import org.yetiz.lib.acd.Entity.NodeInfo;
 import org.yetiz.lib.acd.Entity.NodeInfoList;
 import org.yetiz.lib.acd.Entity.Properties;
 import org.yetiz.lib.acd.Entity.Property;
-import org.yetiz.lib.acd.exception.BadContentException;
 import org.yetiz.lib.utils.Log;
 
 import com.google.gson.JsonElement;
@@ -166,7 +163,7 @@ public class Nodes {
 		if (startToken != null) {
 			resourceEndpoint = Utils.stringFormatter("{}&startToken={}", resourceEndpoint, startToken);
 		}
-		if (startToken != sort) {
+		if (!sort.equals(startToken)) {
 			resourceEndpoint = Utils.stringFormatter("{}&sort={}", resourceEndpoint, sort);
 		}
 		if (limit != null && limit > 0) {
@@ -213,7 +210,7 @@ public class Nodes {
 		if (withTempLink) {
 			resourceEndpoint = Utils.stringAppender(resourceEndpoint, "tempLink=true");
 		}
-		if (withAsset != null && withAsset != "") {
+		if (withAsset != null && !withAsset.isEmpty()) {
 			resourceEndpoint = Utils.stringAppender(resourceEndpoint, "&asset=", withAsset);
 		}
 		Response response = acdSession.execute(new RequestBuilder()

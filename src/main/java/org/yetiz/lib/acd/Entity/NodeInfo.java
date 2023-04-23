@@ -22,7 +22,7 @@ public abstract class NodeInfo {
 	protected String status = "";
 	protected Boolean restricted = false;
 	protected Boolean isShared = false;
-	protected Map<String, Map<String, String>> properties = new HashMap<String, Map<String, String>>();
+	protected Map<String, Map<String, String>> properties = new HashMap<>();
 
 	public NodeInfo() {
 	}

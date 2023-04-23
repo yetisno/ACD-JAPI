@@ -69,7 +69,7 @@ public class MainSampleClass {
 	public static void download(InputStream inputStream) {
 		try {
 			FileOutputStream fileOutputStream = new FileOutputStream(new File("tmp/i5e62nT2.jpg"));
-			int read = 0;
+			int read;
 			byte[] buffer = new byte[256];
 			while (true) {
 				read = inputStream.read(buffer);
@@ -97,12 +97,12 @@ public class MainSampleClass {
 		FolderInfo rootFolder = Nodes.getRootFolder(acdSession);
 		NodeInfoList infoList = Nodes.getChildList(acdSession, rootFolder, null);
 		List<NodeInfo> nodeInfos = infoList.getList();
-		for (int i = 0; i < nodeInfos.size(); i++) {
-			if (nodeInfos.get(i).getName().equals("Test")){
-				acd.removeFolder(nodeInfos.get(i).getId());
+		for (NodeInfo nodeInfo : nodeInfos) {
+			if (nodeInfo.getName().equals("Test")) {
+				acd.removeFolder(nodeInfo.getId());
 			}
-			if (nodeInfos.get(i).getName().equals("Test2")){
-				acd.removeFolder(nodeInfos.get(i).getId());
+			if (nodeInfo.getName().equals("Test2")) {
+				acd.removeFolder(nodeInfo.getId());
 			}
 		}
 

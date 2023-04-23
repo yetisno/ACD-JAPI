@@ -31,7 +31,7 @@ public class FileInfo extends NodeInfo {
 		return contentProperties;
 	}
 
-	public class ContentProperties {
+	public static class ContentProperties {
 		protected Long version = Long.MIN_VALUE;
 		protected String md5 = "";
 		protected Long size = Long.MIN_VALUE;
