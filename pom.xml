@@ -5,7 +5,7 @@
 
   <groupId>org.yetiz</groupId>
   <artifactId>ACD-JAPI</artifactId>
-  <version>1.1.5v</version>
+  <version>1.1.6v</version>
 
   <build>
     <plugins>
